@@ -1,0 +1,54 @@
+div(ng-controller="raciController")
+  .square(ng-if="showLoader")
+    .spinner
+      .ball
+      p(ng-i18next="") raciView.loading
+  div(ng-if="!showLoader")
+    div
+      .well.well-lg(ng-show="raciList.task_count <= 0", ng-i18next="") raciView.createTasksFirst
+      .raci-view(ng-hide="raciList.task_count <= 0")
+        .well.well-lg.raci-note(ng-show="raciList.resources <= 0", ng-i18next="") raciView.createNewResource
+        .alert(ng-class="message.alertType", ng-show="message", style="margin-top:20px;") {{ message.text }}
+        .form-group
+          a.btn.btn-info(href="", ng-click="exportToRaciCSV()")
+            i.fa.fa-download
+            &nbsp;
+            span(ng-i18next="") raciView.exportAsCsv
+        .contacts.table.table-hover(style="{{ 'width:' + raciWidth + 'px;'}}")
+          .thead(style="{{ 'width:' + raciWidth + 'px;'}}")
+            .tr.risk-header.clearfix
+              .th(ng-i18next="") raciView.task
+              .th(ng-repeat="resource in raciList.resources")
+                {{ resource | cut:true:14:' ...' }}
+                &nbsp
+                &nbsp
+                span.label.label-danger.delete-raci(ng-click="deleteResource(currentNode, resource)", ng-hide="userResource == resource") X
+              .th.new-resource
+                  span.text(ng-hide="_raci.showInput", ng-click="showRaciInput()", ng-i18next="") raciView.addResource
+                  span.plus.green(ng-hide="_raci.showInput", ng-click="showRaciInput()")
+                  input.add.form-control(
+                    ng-show="_raci.showInput"
+                    ng-model="resourceName"
+                    focus-me="_raci.showRaciInput"
+                    ng-enter="doneEditing(); addPerson(resourceName); resourceName=''; _raci.showInput=false; _raci.showRaciInput=false;"
+                    ng-esc="cancelRaciAdd()"
+                    focus-out="cancelRaciAdd()")
+                  button.btn.btn-primary(ng-show="_raci.showInput"
+                    ng-click="addPerson(resourceName); resourceName=''; _raci.showInput=false; _raci.showRaciInput=false"
+                    ng-i18next="") raciView.add
+          .tbody(style="{{ 'width:' + raciWidth + 'px;'}}")
+            .tr.clearfix(ng-repeat="task in raciList.tasks")
+              .td.raci-task-title {{ task.title | cut:true:24:' ...' }}
+              .td(ng-repeat="resource in raciList.resources")
+                div(ng-init="new_role=findRaci(resource, task).role;")
+                  .btn-group(dropdown, is-open="status.isopen")
+                    button.btn.btn-primary.dropdown-toggle.raciButton(type="button"
+                      ng-click="stashButton($event )"
+                      class="{{findRaci(resource, task).role}}"
+                      dropdown-toggle){{'raciView.'+(findRaci(resource, task).role || 'unassigned') | i18next}}
+                      span.caret
+                    ul.dropdown-menu#raciRole(role="menu")
+                      li(ng-click="updateRaciRole(findRaci(resource, task), task, resource, 'responsible', 'Responsible', 'rgb(227, 70, 29)')", ng-i18next="") raciView.responsible
+                      li(ng-click="updateRaciRole(findRaci(resource, task), task, resource, 'accountable', 'Accountable', 'rgb(255, 161, 0)')", ng-i18next="") raciView.accountable
+                      li(ng-click="updateRaciRole(findRaci(resource, task), task, resource, 'consulted', 'Consulted', '#428bca')", ng-i18next="") raciView.consulted
+                      li(ng-click="updateRaciRole(findRaci(resource, task), task, resource, 'informed', 'Informed', 'rgb(156, 164, 156)')", ng-i18next="") raciView.informed

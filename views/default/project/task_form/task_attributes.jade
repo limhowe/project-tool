@@ -1,0 +1,126 @@
+ng-include(src="'views/default/project/includes/task_flipper'")
+form.form-tab(role="form")
+  .form-group
+    label.control-label
+      span(ng-i18next="") taskForm.timezone
+      &nbsp;
+      span(ng-bind="getProjectTimezone()")
+
+  .form-group.row.datepick
+      label.col-xs-8.col-sm-2.control-label(for="inputStartDate", ng-i18next="") taskForm.startDate
+      .form-horizontal.col-xs-8.col-sm-4
+        p.input-group
+          input.form-control.date-picker#inputStartDate(type="text"
+            datepicker-popup="{{datepickerFormat}}"
+            show-weeks="false"
+            ng-model="currentNode.start_date"
+            is-open="startDateControlOption.opened"
+            min-date="minDate"
+            datepicker-options="dateOptions"
+            ng-change="update(currentNode)"
+            close-text="Close")
+          span.input-group-btn
+            button.btn.btn-default(type="button", ng-click="openStartDate($event)")
+              i.glyphicon.glyphicon-calendar
+
+      label.col-xs-8.col-sm-2.control-label.date-picker(for="inputEndDate", style="line-height:34px;", ng-i18next="") taskForm.endDate
+      .form-horizontal.col-xs-8.col-sm-4
+        p.input-group
+          input.form-control.date-picker#inputEndDate(type="text"
+            datepicker-popup="{{datepickerFormat}}"
+            show-weeks="false"
+            ng-model="currentNode.end_date"
+            is-open="endDateControlOption.opened"
+            min-date="minDate"
+            datepicker-options="dateOptions"
+            ng-change="update(currentNode)"
+            close-text="Close")
+          span.input-group-btn
+            button.btn.btn-default(type="button", ng-click="openEndDate($event)")
+              i.glyphicon.glyphicon-calendar
+
+  .form-group
+    label.control-label(ng-i18next="") taskForm.complete
+    .progress.progress-striped(my-progress="currentNode.complete")
+    .range-slider(ng-hide="project.settings.use_quality"
+      range-slider
+      min="0"
+      max="100"
+      startlow="0"
+      starthigh="100"
+      step="5"
+      ng-model="currentNode.complete"
+      ng-change="updateComplete(currentNode)")
+
+  .form-group
+    label.control-label(for="inputDuration", ng-i18next="") taskForm.duration
+    .row
+      .col-xs-6.form-group.duration-value
+        input.form-control#inputDuration(type="number",
+          min="0",
+          ng-model="currentNode.duration.value",
+          autocomplete="off",
+          ng-i18next="[placeholder]taskForm.numberHere"
+          ng-change="updateDuration(currentNode);")
+      .col-xs-6.form-group
+        select.form-control(ng-model="currentNode.duration.type"
+          ng-options="t for t in ['minutes', 'hours', 'days', 'weeks', 'months']"
+          ng-change="updateDuration(currentNode)")
+
+  .form-group
+    label.control-label(ng-i18next="") [i18next]({duration: sumOfChildrenDuration(currentNode)})taskForm.subTaskDurationSum
+
+  .form-group
+    label.control-label(for="inputOptimisticTime", ng-i18next="") taskForm.optimisticTime
+    .row
+      .col-xs-6.form-group.optimistic-time-value
+        input.form-control#inputOptimisticTime(type="number"
+          min="0"
+          ng-model="currentNode.optimisticTime.value"
+          autocomplete="off"
+          ng-i18next="[placeholder]taskForm.numberHere"
+          ng-change="update(currentNode)")
+      .col-xs-6.form-group
+        select.form-control#optimisticTimeType(ng-model="currentNode.optimisticTime.type"
+          ng-options="t for t in ['minutes', 'hours', 'days', 'weeks', 'months']"
+          ng-change="update(currentNode)")
+
+  .form-group
+    label.control-label(for="inputPessimisticTime", ng-i18next="") taskForm.pessimisticTime
+    .row
+      .col-xs-6.form-group.pessimistic-time-value
+        input.form-control#inputPessimisticTime(type="number"
+          min="0"
+          ng-model="currentNode.pessimisticTime.value"
+          autocomplete="off"
+          ng-i18next="[placeholder]taskForm.numberHere"
+          ng-change="update(currentNode)")
+      .col-xs-6.form-group
+        select.form-control(ng-model="currentNode.pessimisticTime.type"
+          ng-options="t for t in ['minutes', 'hours', 'days', 'weeks', 'months']"
+          ng-change="update(currentNode)")
+
+  .form-group
+    label.control-label(for="inputMostLikelyTime", ng-i18next="") taskForm.mostLikelyTime
+    .row
+      .col-xs-6.form-group.most-likely-time-value
+        input.form-control#inputMostLikelyTime(type="number"
+          min="0"
+          ng-model="currentNode.mostLikelyTime.value"
+          autocomplete="off"
+          ng-i18next="[placeholder]taskForm.numberHere"
+          ng-change="update(currentNode)")
+      .col-xs-6.form-group
+        select.form-control(ng-model="currentNode.mostLikelyTime.type"
+          ng-options="t for t in ['minutes', 'hours', 'days', 'weeks', 'months']"
+          ng-change="update(currentNode)")
+
+  .form-group
+    label.control-label(ng-i18next="") [i18next]({duration: getExpectedTime(currentNode).value, type: getExpectedTime(currentNode).type})taskForm.expectedTime
+
+  .form-group
+    label.control-label(for="inputCost", ng-i18next="") taskForm.cost
+    input.form-control#inputCost(type="text", ng-model="currentNode.cost", ng-change="update(currentNode)")
+  .form-group
+    label.control-label(ng-i18next="") [i18next]({sum: (getSumOfCost(currentNode)|number:2)})taskForm.costSum
+hr

@@ -1,0 +1,13 @@
+xhtml
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hello
+    p
+      if user.name && user.name.first
+        #{user.name.first} #{user.name.last}
+      else
+        #{user.email}
+
+      |  has assigned you a new task <a href="http://#{domain}/project/#{node._project}/show?task=#{node._id}">#{node.title}</a>, please click <a href="http://#{domain}/#{is_registered ? 'signin':'signup/' + user._id + '/' + email}">here</a> to log in and view your assignment.

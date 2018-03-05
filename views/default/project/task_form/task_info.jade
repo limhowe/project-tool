@@ -1,0 +1,246 @@
+ng-include(src="'views/default/project/includes/task_flipper'")
+
+#task-info-content
+  .row
+    div(ng-include="'views/default/project/includes/invite_modal'")
+
+    //-===================================================================================
+    //- Title
+    //-===================================================================================
+
+    .col-lg-8.task-info-header
+      .row
+        .col-sm-8
+          .info-task-title.content-editable(
+            editable
+            edit-enter="updateTaskTitle"
+            edit-data="{{ {text: currentNode.title, _id: currentNode._id} }}"
+            ng-model="currentNode.title"
+            ) {{currentNode.title}}
+        .col-sm-4.text-right
+          a.task-complete(ng-click="completeTask(currentNode)", ng-class="{ 'completed': currentNode.complete === 100 }")
+            i.fa.fa-check-circle
+          a.task-clone(ng-click="cloneTask(currentNode)")
+            i.fa.fa-clone
+          a.task-delete(nodrag='', ng-click="broadcastDelete(currentNode)")
+            i.fa.fa-trash-o
+      .row
+        .col-sm-9
+          .content-editable.info-task-description(editable
+            edit-multiline="true"
+            edit-enter="updateDescription"
+            edit-data="{{ {text: currentNode.notes, _id : currentNode._id, alt: '+ add description'} }}"
+            ng-model="currentNode.notes"
+            )
+        .col-sm-3.text-right(ng-bind="currentNode.task_id")
+
+      //-===================================================================================
+      //- create child / parent buttons
+      //-===================================================================================
+      .list_view_button_panel
+        button.info-button.btn.btn-primary.hidden(ng-if="viewType != 'AGILE'", ng-click="createChildTask(currentNode, 'bottom')", ng-i18next="") taskForm.createSubTask
+      hr.hidden-lg
+
+    //-===================================================================================
+    //- agile controlls
+    //-===================================================================================
+    .col-lg-4.info-status
+      .ti-status.ti-end
+        .agile-controll-box
+          .agile-form-inputs(ng-show="!isAgileBoardFormVisible")
+            .ph-select
+              select.form-control.first(
+                ng-model="sort.board",
+                ng-options="board.name for board in boards track by board._id",
+                ng-change="selectTaskBoard()",
+                default-option="sort.board.name")
+                option(value="", ng-i18next="") taskForm.selectBoard
+          .agile-list-create(ng-show="isAgileBoardFormVisible")
+            input.editable.form-control.edit-in-place.nf_list_name(type="text"
+              ng-i18next="[placeholder]taskForm.typeAndPressEnter"
+              ng-enter="createAgileBoard(newAgileBoardName); newAgileBoardName='';"
+              focus-me="isAgileBoardFormVisible"
+              ng-esc="hideAgileBoardForm()"
+              focus-out="hideAgileBoardForm()"
+              ng-model="newAgileBoardName")
+          button.info-button.btn.btn-primary.agile(ng-show="isAgileBoardFormVisible", ng-click="createAgileBoard(newAgileBoardName); newAgileBoardName='';", ng-i18next="") taskForm.plusNewBoard
+          button.info-button.btn.btn-primary.agile(ng-show="!isAgileBoardFormVisible", ng-click="showAgileBoardForm()", ng-i18next="") taskForm.plusNewBoard
+
+        hr.hidden-lg
+        .agile-form-inputs
+          .ph-select.select-list(ng-show="!isAgileListFormVisible")
+            select.form-control(
+              ng-model="sort.list",
+              ng-options="list.name for list in sort.board.lists",
+              ng-change="addTaskToList(currentNode, sort.list, sort.board)",
+              default-option="sort.list.name")
+              option(value="", ng-i18next="") taskForm.selectList
+          .agile-list-create(ng-show="isAgileListFormVisible")
+            input.form-control.nf_list_name(type="text"
+              style="margin-top: 8px;"
+              ng-i18next="[placeholder]taskForm.typeAndPressEnter"
+              ng-enter="createAgileList(sort.board, newAgileListName); newAgileListName='';"
+              focus-out="hideAgileListForm()"
+              focus-me="isAgileListFormVisible"
+              ng-esc="hideAgileListForm()"
+              ng-model="newAgileListName")
+          button.info-button.btn.btn-primary.agile(ng-click="toggleAgileListForm()", ng-i18next="") taskForm.plusNewList
+
+        //-===================================================================================
+        //- Assignment conntrol
+        //-===================================================================================
+        .ti-status.ti-assigned(dropdown)
+          br.hidden-xs.hidden-sm.hidden-md
+          hr.visible-xs.visible-sm.visible-md
+          button.info-button.btn.btn-primary.assign-button(dropdown-toggle, ng-i18next="") taskForm.assign
+          ul.dropdown-menu.ph-menu.user-dropdown(role="menu")
+            li.dropdownItem(ng-if="!project._users || !project._users.length")
+              span(ng-click="invite(currentNode._project)", ng-i18next="") taskForm.inviteUsersToAssign
+            li.dropdownItem(ng-repeat="user in project._users | unassigned : currentNode.assigned_users ", ng-click="assignToUser(currentNode, user);"){{ user.user.name.first || user.user.email || user.invite_email + ' (waiting for registration)' }}
+          br
+          .user-wrap
+            .task-info-assigned-user.status-value.panel(ng-repeat="user in currentNode.avatars", style="margin-bottom: 10px") {{ user.name_first || user.user.email || user.invite_email || user.email }}
+              span.delete-icon.glyphicon.glyphicon-remove-sign(ng-click="rejectUser(currentNode, user)", _style="margin-left: 4px;")
+          br
+    //-===================================================================================
+    //- files
+    //-===================================================================================
+   div
+    h4.fancy
+      span(ng-i18next="") taskForm.files
+    .files.row
+      .col-xs-10.col-sm-5.col-lg-4(ng-repeat="file in currentNode._files")
+        .file.panel
+          h5.file-name {{ file.name }}
+          .button-group
+            a.open(href="{{ file.link }}", target="_blank", ng-i18next="") [i18next]({source: file.from != 's3' ? file.from : ''})taskForm.openFile
+            a.delete(ng-click="deleteFile(file)", ng-i18next="") taskForm.delete
+    .files
+      .add-file
+        button.info-button.btn.dropbox.dropboxButton(ng-click="addFromDropbox()", ng-i18next="") taskForm.chooseFromDropbox
+        button.info-button.btn.google(id="google", ng-click="addFromGoogle()", ng-i18next="") taskForm.chooseFromGoogle
+        button.info-button.btn.onedrive(id="onedrive", ng-click="addFromOneDrive()", ng-i18next="") taskForm.chooseFromOneDrive
+        button.info-button.btn.upload(ng-click="uploadFile()", ng-i18next="") taskForm.upload
+        .alert(ng-class="message.alertType") {{ message.text }}
+        input.upload-file(type="file", onchange="angular.element(this).scope().onSelectFile(this)")
+    //-===================================================================================
+    //- qaulity
+    //-===================================================================================
+
+  .quality
+    h4.fancy
+      span(ng-i18next="") taskForm.checklist
+    .progress.progress-striped(my-progress="qualityProgress(currentNode)", ng-show="currentNode._quality && currentNode._quality.length")
+    ul.quality-list
+      li.quality-item(ng-repeat="quality in currentNode._quality")
+        input.quality-checkbox(type="checkbox", ng-model="quality.completed", ng-change="completeQuality(currentNode, quality)")
+        span.quality-text.content-editable(editable
+          ng-class="{ checked: quality.completed }"
+          id="{{'q_'+quality._id}}"
+          quality-id = "{{quality._id}}"
+          edit-enter = "updateQualityText"
+          edit-data="{{quality}}"
+          ng-model="quality.text")
+        span.remove.delete-icon.glyphicon.glyphicon-remove-sign(ng-click="deleteQuality(currentNode, quality)")
+    .add-quality
+      input.form-control(type="text", ng-i18next="[placeholder]taskForm.addItem", ng-model="currentNode.$qualityText", ng-enterup="addQuality(currentNode)")
+  //-===================================================================================
+  //- dependencies
+  //-===================================================================================
+  .dependencies
+    h4.fancy
+      span(ng-i18next="") taskForm.dependencies
+    .form-group.form-inline
+      .form-group
+        input.form-control(type="text"
+          ng-model="currentNode.$dependency.title"
+          autocomplete="off"
+          typeahead="dep.title for dep in nodesByTitle($viewValue)"
+          typeahead-editable="false",
+          ng-i18next="[placeholder]taskForm.findTask"
+          typeahead-min-length='3'
+          typeahead-on-select="onSelectDependency($item, currentNode)")
+      .form-group.dependency-type.dependency-type
+        select.form-control.dependencyType(ng-model="currentNode.$dependency.type")
+          option(value="FS") FS
+          option(value="FF") FF
+          option(value="SS") SS
+          option(value="SF") SF
+      .form-group
+        button.btn.btn-default(ng-disabled="!currentNode.$dependency._id || !currentNode.$dependency.type", ng-click="addDependency(currentNode)", ng-i18next="") taskForm.add
+    .dependency-list
+      .task-info-dependency.panel(ng-repeat="dependency in currentNode._dependency") {{ dependency.node.title }}  {{ ' '+ dependency.type }}
+        span.glyphicon.delete-icon.dep.pull-right.glyphicon-remove-sign(ng-click="deleteDependency(currentNode, dependency)")
+  //-===================================================================================
+  //- Risks
+  //-===================================================================================
+  .dependencies
+    h4.fancy
+      span(ng-i18next="") taskForm.risks
+    .risk-button-container(dropdown)
+      button.btn.btn-info.info-button(ng-click="newFormRiskModal()", ng-i18next="") taskForm.addRisk
+      button.btn.btn-info.info-button(dropdown-toggle, ng-i18next="") taskForm.associateWithRisk
+      ul.dropdown-menu.user-menu.ph-menu(role="menu")
+        li.dropdownItem(ng-repeat="risk in riskList | filter:nodeRiskFilter", ng-click="addTaskToRisk(risk, currentNode)"){{ risk.name }}
+
+    .row
+      .col-xs-3.task-info-risk.panel(ng-repeat="risk in currentNode.risks", ng-click="showRiskModal(risk)")
+        h4 {{ risk.name | cut:true:15:'...' }}
+        p {{ 'probability:  ' + risk.probability }}
+        p {{ 'impact:  ' + risk.impact }}
+        p {{ 'score:  ' + risk.probability * risk.impact }}
+        span(dropdown)
+          span.glyphicon.delete-icon.dep.pull-right.glyphicon-remove-sign(dropdown-toggle, ng-click="stopProp($event)")
+          ul.dropdown-menu.ph-menu(role="menu")
+            li.dropdownItem(ng-click="removeRisk(currentNode, risk, $event)", ng-i18next="") taskForm.removeRisk
+            li.dropdownItem(ng-click="deleteRisk(currentNode, risk, $event)", ng-i18next="") taskForm.deleteRisk
+  //-===================================================================================
+  //- comments
+  //-===================================================================================
+  div
+    h4.fancy
+      span(ng-i18next="") taskForm.comments
+    ul.comments(ng-if="comments")
+      div(ng-repeat="comment in comments | orderByVotes | orderBy:created_at:true")
+        div(ng-if="comment._id")
+          li.comment.panel
+            .panel-heading.by-who
+              span.pull-left
+                b {{ comment.user.name.first ? comment.user.name.first + ' ' + comment.user.name.last : comment.user.email}}
+              div
+                &nbsp;&nbsp;
+                span.glyphicon.glyphicon-arrow-up(ng-click="upvote(comment)", ng-style="{color: comment.upvote ? '#D24D57': '#58666e'}")
+                &nbsp;
+                span {{ comment.upvotes.length }}
+                &nbsp;
+                span.glyphicon.glyphicon-remove(ng-hide="comment.user._id != user._id", ng-click="removeComment(comment, comments)")
+                span.pull-right(am-time-ago="comment.created_at")
+
+            .panel-body.text
+              .content-editable.comment-text(ng-if="comment.user._id == user._id", id="{{'c_'+ comment._id}}"
+                editable
+                edit-multiline="true"
+                comment-id = "{{comment._id}}"
+                edit-enter="updateComment"
+                edit-data="{{comment}}"
+                ng-model="comment.text"
+                validation="true"
+                id="comment-{{comment._id}}"
+                style="white-space:pre-wrap; white-space:-moz-pre-wrap; white-space:-pre-wrap; white-space:-o-pre-wrap; word-wrap:break-word; box-sizing:border-box; -moz-box-sizing:border-box; webkit-box-sizing:border-box;")
+              div(ng-if="comment.user._id != user._id", style="white-space:pre-wrap; white-space:-moz-pre-wrap; white-space:-pre-wrap; white-space:-o-pre-wrap; word-wrap:break-word; box-sizing:border-box; -moz-box-sizing:border-box; webkit-box-sizing:border-box;") {{comment.text}}
+              br
+              span.label.label-success.reply(ng-click="show_reply(comment)", ng-i18next="") taskForm.reply
+              .add-comment.inside.panel.panel-default(ng-show="comment.show_reply")
+                .enter-text
+                  textarea(ng-model="text", rows="3", ng-i18next="[placeholder]taskForm.yourComment")
+                .panel-footer
+                  button.comment-btn.btn.btn-success.btn-sm.pull-right(ng-click="addComment(text, currentNode, comment); text='';", ng-i18next="") taskForm.comment
+          ng-include(src="'views/default/project/includes/comment'")
+    .add-comment.panel.panel-default
+      .enter-text
+          textarea#commentText(ng-model="text",
+            rows="3",
+            mention,
+            ng-i18next="[placeholder]taskForm.yourComment")
+      .panel-footer
+        button.comment-btn.btn.btn-success.btn-sm.pull-right(ng-click="addComment(text, currentNode, null); text='';", ng-i18next="") taskForm.comment

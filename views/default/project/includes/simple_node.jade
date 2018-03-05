@@ -1,0 +1,41 @@
+.tree-node.tree-node-content
+  .p
+    a.btn.btn-success.btn-xs.collapse-button(ng-if="!isHappyParent(task)", nodrag, ng-click='hide(this, task)')
+      span.glyphicon(nodrag,ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}")
+    span.fa.fa-check-circle.circle-icon.listControlls.completeButton(ng-if="task.complete == 100", ng-click="uncompleteTask(task)")
+    span.fa.fa-check-circle.circle-icon.uncompleteButton.listControlls.completeButton(ng-if="task.complete != 100", ng-click="updateComplete(task, true)")
+    h4.lv-task-title(
+      ng-model="task.title"
+      id="{{task._id}}"
+      ng-class="{'complete-task-title': isTaskComplete(task), 'list-task-parent': !isHappyParent(task)}"
+      editable
+      on="dblClick"
+      edit-confirm="confirmTempTask(this, task)"
+      edit-cancel="cancelTempTask(this, task)"
+      edit-data="{{ {_id: task._id} }}"
+      promt="Press enter to save and create another."
+      ){{task.title | filter:linky}}
+    .task-actions
+      div
+        span(ng-repeat="avatar in task.avatars")
+          .avatarImg(ng-if="avatar.imgUrl && avatar.img != 'wtf'")
+            img(ng-src="{{avatar.imgUrl}}", ng-if="avatar.imgUrl != 'wtf'")
+            i.fa.fa-user-secret(ng-if="avatar.imgUrl == 'wtf'")
+            .tool-tip(ng-if="avatar.email") {{avatar.email}}
+          .avatar(ng-if="avatar.initials"){{ avatar.initials}}
+            .tool-tip {{avatar.email}}
+          .avatar(ng-if="avatar.placeholder")
+            i.fa.fa-user
+            .tool-tip {{avatar.email}}
+
+        a.create-child(nodrag='', ng-click='createTempTask(this, task)')
+          span.glyphicon.glyphicon-plus
+
+        .lv-info-button(ng-click="selectNode(task, list, board)")
+          i.fa.fa-info
+
+        .draggable-icon(ui-tree-handle)
+          i.fa.fa-arrows
+
+ol(ui-tree-nodes, ng-model='task._nodes', ng-class="{hidden: collapsed}", ng-init="initCollapse(this)")
+  li(id="{{task._id}}", ng-repeat='task in task._nodes track by task._id | orderBy:position ', ui-tree-node, ng-include="'views/default/project/includes/simple_node'")

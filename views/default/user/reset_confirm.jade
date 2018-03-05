@@ -1,0 +1,15 @@
+.text-center
+  #logo
+  h1.reset-title#form-title(ng-i18next="") reset.resetPassword
+
+.signin-signup-form-center
+  form.user-form.form-horizontal.reset-form(role="form", name="resetForm")
+    .form-group(ng-show="message")
+      .alert(ng-class="message.alertType", ng-bind="message.text | i18next")
+
+    .form-group
+      input.form-control(type="password", required, ng-model="password", ng-i18next="[placeholder]account.password")
+    .form-group
+      input.form-control(type="password", required, ng-model="confirmPassword", ng-i18next="[placeholder]account.confirmNewPassword")
+    .form-group.signup-buttons
+      button.btn.btn-info#reset-btn(type="submit", ng-click="reset(password, confirmPassword)", ng-disabled="resetForm.$invalid", ng-i18next="") reset.reset

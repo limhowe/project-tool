@@ -1,0 +1,8 @@
+xhtml
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hola
+    p Haz sido invitado a unirte al proyecto: <b>#{project.name}</b>
+    p Haz clic aquí para <a href="http://#{domain}/#{ is_registered ? 'signin' : 'signup/invite/' + user._id + '/' + email }">empezar a trabajar</a>.

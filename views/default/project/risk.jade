@@ -1,0 +1,93 @@
+.square(ng-if="vm.showLoader")
+  .spinner
+    .ball
+    p(ng-i18next="") riskView.loading
+div(ng-if="!vm.showLoader")
+  .well.well-lg(ng-if="!vm.riskList.length", ng-i18next="") riskView.createFirstRisk
+  .text-right(ng-if="vm.riskList.length")
+    a.btn.btn-info.export-risks-csv(href="", ng-click="exportToRiskCSV()")
+      i.fa.fa-download
+      span(ng-i18next="") riskView.exportAsCsv
+  .contacts.risks.table.table-hover.table-bordered(ng-if="vm.riskList.length")
+    .risk-table.risk-header.clearfix
+      .risk-table-header.col-xs-4.col-md-2
+        span(ng-i18next="") riskView.name
+        span.sort-container
+          i.fa.fa-caret-down(ng-click="vm.sortTable('name', $event)")
+      .risk-table-header.col-xs-2.col-md-1.hidden-sm.hidden-xs
+        span(ng-i18next="") riskView.topic
+        span.sort-container
+          i.fa.fa-caret-down(ng-click="vm.sortTable('topic', $event)")
+      .risk-table-header.col-xs-1.hidden-sm.hidden-xs
+        span(ng-i18next="") riskView.probability
+        span.sort-container
+          i.fa.fa-caret-down(ng-click="vm.sortTable('probability', $event)")
+      .risk-table-header.col-xs-1.hidden-sm.hidden-xs
+        span(ng-i18next="") riskView.impact
+        span.sort-container
+          i.fa.fa-caret-down(ng-click="vm.sortTable('impact', $event)")
+      .risk-table-header.col-xs-1.hidden-sm.hidden-xs
+        span(ng-i18next="") riskView.score
+        span.sort-container
+          i.fa.fa-caret-down(ng-click="vm.sortTable('score', $event)")
+      .risk-table-header.col-xs-4.col-md-2(ng-i18next="") riskView.associatedTask
+      .risk-table-header.col-xs-4.col-md-2(ng-i18next="") riskView.files
+      .risk-table-header.col-lg-1.col-md-1.clearfix.hidden-sm.hidden-xs(ng-i18next="") riskView.delete
+
+    .risk-table.clearfix(ng-repeat="risk in vm.riskList | orderBy:orderColumn:orderReverse")
+      .risk-table-body.col-xs-4.col-md-2(style="overflow:hidden; white-space:nowrap; text-overflow:ellipsis;", ng-click="showRiskModal(risk)")
+        span(style="overflow:hidden; white-space:nowrap; text-overflow:ellipsis;") {{ risk.name }}
+        div.hidden-lg.hidden-md
+          strong(style="padding-right:10px;", ng-i18next="") riskView.topic
+          span {{ risk.topic }}
+        div.hidden-lg.hidden-md
+          strong(style="padding-right:10px;", ng-i18next="") riskView.probability 
+          span {{ risk.probability }}
+        div.hidden-lg.hidden-md
+          strong(style="padding-right:10px;", ng-i18next="") riskView.impact 
+          span {{ risk.impact }}
+        div.hidden-lg.hidden-md
+          strong(style="padding-right:10px;", ng-i18next="") riskView.score 
+          span {{ risk.score }}
+        .delete-risk.hidden-lg.hidden-md(ng-click="vm.deleteRisk(risk.task, risk)", ng-i18next="") Delete
+      .risk-table-body.col-xs-1.hidden-sm.hidden-xs(ng-click="showRiskModal(risk)") 
+        span(style="overflow:hidden; white-space:nowrap; text-overflow:ellipsis;") {{ risk.topic }}
+      .risk-table-body.col-xs-1.hidden-sm.hidden-xs(style="text-align:right;", ng-click="showRiskModal(risk)") {{ risk.probability }}
+      .risk-table-body.col-xs-1.hidden-sm.hidden-xs(style="text-align:right;", ng-click="showRiskModal(risk)") {{ risk.impact }}
+      .risk-table-body.col-xs-1.hidden-sm.hidden-xs(style="text-align:right;", ng-click="showRiskModal(risk)") {{ risk.score }}
+      .risk-table-body.col-xs-4.col-md-2
+        span.glyphicon.glyphicon-plus.add-icon(ng-click="vm.showTaskSearch(risk, $event)")
+        input.form-control(type="text"
+          required
+          on-click='stopProp($event)'
+          autocomplete="off"
+          typeahead="node.title for node in vm.searchTask(risk)"
+          typeahead-editable="true"
+          ng-i18next="[placeholder]riskView.enterTaskName"
+          typeahead-min-length='2'
+          typeahead-on-select="add_from_typeahead($item, risk)",
+          ng-model="risk.query"
+          ng-show="risk.searchFormFocused"
+          focus-me="risk.searchFormFocused"
+          focus-out="vm.showTaskSearch(risk, $event)")
+
+        span.risk-task(ng-repeat="node in risk.node"){{ node.title }}
+          span.risk-task-delete.delete-icon.glyphicon.glyphicon-remove-sign(ng-click="vm.removeRisk(node, risk, $event)")
+
+      .risk-table-body.col-xs-4.col-md-2
+        span.glyphicon.glyphicon-plus.add-icon(ng-click="vm.toggleButtons(risk)")
+        .risk-task.risk-file(ng-repeat="file in risk._files")
+          a.risk-file(href="{{ file.link }}", target="_blank") {{ file.name }}
+          span.delete-icon.glyphicon.glyphicon-remove-sign(ng-click="vm.deleteFile(risk, file, $event)")
+        .file-button-box.files(ng-show="risk.isButtonsVisible")
+          .add-file
+            button.info-button.btn.dropbox.dropboxButton(ng-click="vm.addFromDropbox(risk, $event)", ng-i18next="") riskView.chooseFromDropbox
+            button.info-button.btn.google(ng-click="vm.addFromGoogle()", ng-i18next="") riskView.chooseFromGoogle
+            button.info-button.btn.onedrive(ng-click="vm.addFromOneDrive()", ng-i18next="") riskView.chooseFromOneDrive
+            button.info-button.btn.upload(ng-click="vm.uploadFile(risk)", ng-i18next="") riskView.upload
+            .alert(ng-class="message.alertType") {{ message.text }}
+            input.upload-file(type="file", data-risk="{{ risk._id }}", onchange="angular.element(this).scope().onSelectFile(this)")
+      .risk-table-body.col-lg-1.col-md-1.hidden-sm.hidden-xs
+        .delete-risk(ng-click="vm.deleteRisk(risk.task, risk)", ng-i18next="") Delete
+  button.btn.btn-primary(ng-click="newRiskModal()", ng-i18next="") riskView.newRisk
+div(ng-include="'views/default/project/includes/risk_modal'")

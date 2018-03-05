@@ -1,0 +1,41 @@
+{
+    "Password Reset": {
+        "es": "Restablecer Contraseña"
+    },
+    "Forget Something?": {
+        "es": "¿Olvidas Algo?"
+    },
+    "Had to run?": {
+        "es": "¿Tuvo que Salir?"
+    },
+    "Email confirmation": {
+        "es": "Confirmación de Email"
+    },
+    "$[1] wrote a comment on the task : \"$[2]\"": {
+        "es": "$[1] escribió un comentario en la tarea : \"$[2]\""
+    },
+    "$[1] mentioned you in comment.": {
+        "es": "$[1] te mencionó en un comentario."
+    },
+    "Your created task \"$[1]\" is completed": {
+        "es": "Tu tarea \"$[1]\" se ha completado"
+    },
+    "You have been assigned a task": {
+        "es": "Te han asignado una tarea"
+    },
+    "Custom Project to Import for $[1]": {
+        "es": "Proyecto a Importar para $[1]"
+    },
+    "You have received a PlanHammer project invitation": {
+        "es": "Ha recibido una invitación a un proyecto en PlanHammer"
+    },
+    "You have received an invitation": {
+        "es": "Ha recibido una invitación"
+    },
+    "Remember Us?": {
+        "es": "¿Nos Recuerdas?"
+    },
+    "Your free account is expiring": {
+        "es": "Tu cuenta gratuita está expirando"
+    }
+}

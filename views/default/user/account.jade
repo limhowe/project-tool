@@ -1,0 +1,151 @@
+.container
+  h2(ng-i18next="") account.accountInformation
+  .form-group(ng-show="message")
+    .alert(ng-class="message.alertType") {{ message.text }}
+
+  tabset
+    tab(active="tab.profile")
+      tab-heading(ng-i18next="") account.profile
+
+      form(role="form")
+        .form-group(ng-show="errorImage")
+          .alert.alert-danger(style="margin: 20px 0 0 0;") {{ errorImage }}
+
+        .form-group.image-uploader-form
+          input.hidden(type="file", name="image", onchange="angular.element(this).scope().upload()")
+          div(ng-cloak)
+            img.user-picture(src="{{user.avatar !== 'wtf' ? user.avatar : '/img/no-image.png'}}")
+          button.btn.btn-success.upload(type="submit", onclick="angular.element(this).scope().uploadDialog()", ng-i18next="") account.uploadPicture
+
+      form.col-md-4.col-md-offset-4(role="form", name="userForm")
+
+        .form-group(ng-show="errors")
+          .alert.alert-danger
+            ul(ng-repeat="error in errors")
+              li {{ error.type || error }}
+
+        .form-group(ng-show="successfulUpdate")
+          .alert.alert-success(style="margin: 20px 0 0 0;") {{ successfulUpdate }}
+
+        .form-group
+          label(for="inputUsername")
+            span(ng-i18next="") account.username
+            span(style="color:red;") *
+          input.form-control#inputUsername(type="text", required, ng-model="user.username")
+        .form-group
+            label(for="inputPassword", ng-i18next="") account.currentPassword
+            input.form-control#inputPassword(type="password", ng-model="user.current_password", ng-i18next="[placeholder]account.currentPassword")
+        .form-group
+          label(for="inputPassword", ng-i18next="") account.newPassword
+          input.form-control#inputPassword(type="password", ng-model="user.password", ng-i18next="[placeholder]account.newPassword")
+        .form-group
+          label(for="inputPasswordVerify", ng-i18next="") account.confirmNewPassword
+          input.form-control#inputPasswordVerify(type="password", ng-model="user.password_verify", ng-i18next="[placeholder]account.newPassword", equals="{{ user.password }}")
+        .form-group
+          label(for="inputFirstName")
+            span(ng-i18next="") account.firstName
+            span(style="color:red;") *
+          input.form-control#inputFirstName(type="text", required, ng-model="user.name.first")
+        .form-group
+          label(for="inputLastName")
+            span(ng-i18next="") account.lastName
+            span(style="color:red;") *
+          input.form-control#inputLastName(type="text", required, ng-model="user.name.last")
+        .form-group
+          label(for="inputEmail")
+            span(ng-i18next="") account.email
+            span(style="color:red;") *
+          input.form-control#inputEmail(type="text", required, ng-model="user.email")
+        .form-group
+          label(for="inputAddress", ng-i18next="") account.streetAddress
+          input.form-control#inputAddress(type="text", ng-model="user.address")
+        .form-group
+          label(for="inputCity", ng-i18next="") account.city
+          input.form-control#inputCity(type="text", ng-model="user.city")
+        .form-group
+          label(for="inputState", ng-i18next="") account.state
+          input.form-control#inputState(type="text", ng-model="user.state")
+        .form-group
+          label(for="inputZip", ng-i18next="") account.zipCode
+          input.form-control#inputZip(type="text", ng-model="user.zip")
+        .form-group
+          label(for="inputCountry", ng-i18next="") account.country
+          input.form-control#inputCountry(type="text", ng-model="user.country")
+        .form-group
+          label(for="inputLanguage", ng-i18next="") account.language
+          select.form-control#inputLanguage(ng-model="user.language", ng-options="language.locale as language.name for language in languages")
+        .form-group
+          button.btn.btn-info.btn-block(type="submit", ng-click="update(user, userForm)", ng-disabled="userForm.$invalid", ng-i18next="") account.update
+
+    tab(active="tab.payments")
+      tab-heading(ng-i18next="") account.payments
+      .col-xs-6.col-xs-offset-3(ng-controller="UserCardController")
+        .width350
+          .form-group
+            br
+            .well(ng-show="currentPlan")
+              div(ng-i18next="") [i18next]({planName: currentPlan.name})account.currentPlanInfo
+              div(ng-show="currentPlanExpiration")
+                small(ng-i18next="") [i18next]({expDate: currentPlanExpiration, amount: currentPlanAmount})account.nextPaymentInfo
+
+            label(ng-i18next="") account.creditCard
+            div(ng-show="!currentCard")
+              .form-group(ng-show="error")
+                .alert.alert-danger {{ error }} <br/>
+              .form-group(ng-show="success")
+                .alert.alert-success {{ success }} <br/>
+
+              form#card-form.form-horizontal(role="form", name="cardForm", ng-show="!success")
+                .form-group
+                  .col-xs-12
+                    .card-wrapper
+                .form-group
+                  .col-xs-12
+                    input.form-control.card-number#cardNumber(type="text", required, ng-model="card.number", ng-i18next="[placeholder]account.enterCardNumber", autocomplete="off")
+                .form-group
+                  .col-xs-12
+                    input.form-control.name-on-card#nameOnCard(type="text", ng-model="card.name_on_card", ng-i18next="[placeholder]account.enterNameOnCard", autocomplete="off")
+                .form-group
+                  .cardinfo.col-xs-12
+                    .left
+                      label(ng-i18next="") account.cvc
+                      input.form-control.name-on-card#cvc(type="text", required, ng-model="card.cvc", autocomplete="off")
+                    .right
+                      label(ng-i18next="") account.expiryDate
+                      input.form-control.card-expiry-year#expdate(type="text", required, ng-model="card.expdate", placeholder="mm/yyyy", autocomplete="off")
+                .form-group
+                  .col-xs-12
+                    button.btn.btn-default.btn-info.btn-wide(type="button", ng-click="updateCard(card, cardForm)", ng-disabled="cardForm.$invalid", ng-i18next="") account.updateCard
+
+            div(ng-show="currentCard")
+              .alert.alert-success
+                span(ng-i18next="") account.cardAlreadyAdded
+                button.btn.btn-default(ng-click="currentCard = null", ng-i18next="") account.addNew
+
+            .form-group(ng-show="errorCoupon")
+              .alert.alert-danger {{ errorCoupon }}
+
+            .form-group(ng-show="successCoupon")
+              .alert.alert-success {{ successCoupon }}
+
+            form.form-horizontal(name="couponForm", ng-submit="addCoupon(couponForm)")
+              .form-group
+                .col-sm-12
+                  input.form-control(type="text", required, ng-i18next="[placeholder]account.enterCouponCode", ng-model="couponCode")
+              .form-group
+                .col-sm-12
+                  button.btn.btn-primary.btn-wide(ng-disabled="couponForm.$invalid", ng-i18next="") account.addCoupon
+
+            a.form-link(ng-click="deactivateAccount()", ng-i18next="") account.deactivateAccount
+
+    tab(active="tab.collaborators")
+      tab-heading(ng-i18next="") account.collaborators
+      .collaborator-container(ng-controller="CollaboratorsCtrl")
+        .well(ng-if="!collaborators || collaborators.length===0", ng-i18next="") account.noCollaborators
+
+        ul.col-list
+          li(ng-repeat="col in collaborators", ng-if="col._id != user._id")
+            span {{ col.invite_email || (col.user.name.first + ' ' + col.user.name.last).trim() || col.user.email  }}
+            a(ng-click="delete($index)", style="margin-left: 10px;", ng-i18next="") account.delete
+
+  div(ng-include="'views/user/assigned_modal'")

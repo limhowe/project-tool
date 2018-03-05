@@ -1,0 +1,44 @@
+ng-include(src="'views/default/project/includes/task_flipper'")
+
+.form-tab#raci
+  .alert(ng-class="message.alertType", ng-show="message", style="margin-top:20px;") {{ message.text }}
+  table.table#form_raci_table
+    thead
+      tr
+        th(ng-i18next="") taskForm.user
+        th(ng-i18next="") taskForm.role
+        th
+    tbody
+      tr.risk-table(ng-repeat="raci in currentNode.racis")
+        td
+          .form-resource {{raci.resource}}
+        td
+          .btn-group(dropdown, is-open="status.isopen")
+            button.btn.btn-primary.dropdown-toggle.raciButton(type="button", ng-click="stashButton($event)", class="{{raci.role}}", dropdown-toggle){{'taskForm.'+raci.role || 'taskForm.unassigned' | i18next}}
+              span.caret
+            ul.dropdown-menu#raciRole(role="menu")
+              li(ng-click="updateRaciRole(raci, 'responsible', 'Responsible', 'rgb(227, 70, 29)')", ng-i18next="") taskForm.responsible
+              li(ng-click="updateRaciRole(raci, 'accountable', 'Accountable', 'rgb(255, 161, 0)')", ng-i18next="") taskForm.accountable
+              li(ng-click="updateRaciRole(raci, 'consulted', 'Consulted', '#428bca')", ng-i18next="") taskForm.consulted
+              li(ng-click="updateRaciRole(raci, 'informed', 'Informed', 'rgb(156, 164, 156)')", ng-i18next="") taskForm.informed
+        td
+          span.delete-icon.glyphicon.glyphicon-remove-sign(
+            ng-click="removeRaci(currentNode, raci)"
+            )
+
+    br
+  .form-group
+    .form-inline
+      .form-group
+        input.form-control(type="text", ng-model="currentNode.$raci.resource", autocomplete="off", ng-i18next="[placeholder]taskForm.person")
+      .form-group.raci-role
+        select.form-control#raciRole(class="{{currentNode.$raci.role}}", ng-model="currentNode.$raci.role")
+          option(value="responsible", ng-i18next="") taskForm.responsible
+          option(value="accountable", ng-i18next="") taskForm.accountable
+          option(value="consulted", ng-i18next="") taskForm.consulted
+          option(value="informed", ng-i18next="") taskForm.informed
+      .form-group
+        button.btn.btn-default.raci-button(
+          ng-disabled="!currentNode.$raci.resource || !currentNode.$raci.role",
+          ng-click="addRaci(currentNode)",
+          ng-i18next="") taskForm.add

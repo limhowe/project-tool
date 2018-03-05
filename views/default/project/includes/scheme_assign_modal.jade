@@ -1,0 +1,19 @@
+script(type="text/ng-template", id="schemeAssignModal.html")
+  .modal-header
+    button.close(type="button", ng-click="close()") &times;
+    h4.modal-title(ng-i18next="") schemeAssign.assignUser
+  .modal-body
+    .form-group
+      input.form-control(type="text"
+        required
+        autocomplete="off"
+        typeahead="user.email for user in users"
+        typeahead-editable="true"
+        ng-i18next="[placeholder]schemeAssign.enterEmail"
+        typeahead-min-length='2'
+        typeahead-on-select="broadCast_assign($item, $model, $label)"
+        ng-model="selected_user.email")
+    h4(ng-i18next="") schemeAssign.assignedUsers
+    .task-info-assigned-user.status-value.panel.user-wrap(ng-repeat="_user in avatars")
+      {{_user.invite_email || _user.user.email }}
+      span.pull-right.ph-bordered.delete-icon.glyphicon.glyphicon-remove-sign(ng-click="broadCast_reject(_user)")

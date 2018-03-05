@@ -1,0 +1,60 @@
+{
+  "domain": "localhost:3000",
+  "port": 3000,
+  "db": "mongodb://localhost:27017/lim-project-dev",
+  "database_name": "lim_porject_dev",
+  "cookie_secret": "",
+  "google": {
+    "clientID": "ggggeee11111",
+    "clientSecret": "gg1111111",
+    "callbackURL": "http://localhost:3000/auth/google/callback",
+    "passReqToCallback": true
+  },
+  "linkedin": {
+    "clientID": "te1111",
+    "clientSecret": "tes1111",
+    "callbackURL": "http://localhost:3000/auth/linkedin/callback",
+    "passReqToCallback": true,
+    "scope": ["r_basicprofile", "r_emailaddress"]
+  },
+  "live": {
+    "clientID": "0000000044159F81",
+    "clientSecret": "tJv7-0dTwuFEIB7MNB4UkZCLQwIGu1SY",
+    "callbackURL": "http://localhost:3000/auth/live/callback",
+    "scope": ["wl.signin", "wl.basic", "wl.emails"],
+    "passReqToCallback": true
+  },
+  "mail": {
+    "type": "mandrill",
+    "auth": {
+      "apikey": "MAINDRIL-APIKEY"
+    },
+    "options": {
+      "service": "SEVICENAMES"
+    },
+    "from": {
+      "name": "lim-project",
+      "email": "limhowe1214@gmail.com"
+    }
+  },
+  "payment": {
+    "type": "stripe",
+    "options": {
+      "api_key": "skk.................."
+    }
+  },
+  "analytics": {
+    "accountId": "YOU-ACCOUNT",
+    "domain": "your-domain"
+  },
+  "aws": {
+    "id": "YOUR-ID",
+    "key": "your-key"
+  },
+  "aspose": {
+    "appSID": "your-aspose-id",
+    "appKey": "aspose-app-key",
+    "baseURI": "http://api.aspose.com/v1.1/"
+  },
+  "demo": "56d095051dae0d28238ce096"
+}

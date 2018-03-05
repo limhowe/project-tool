@@ -1,0 +1,13 @@
+.text-center
+  #logo
+  h1.reset-title#form-title(ng-i18next="") reset.resetPassword
+
+.signin-signup-form-center
+  form.user-form.form-horizontal.reset-form(role="form", name="resetForm")
+    .form-group(ng-show="message")
+      .alert(ng-class="message.alertType") {{ message.text }}   <br/>
+
+    .form-group
+      input.form-control(type="email", required, ng-model="email", ng-i18next="[placeholder]reset.yourEmail")
+    .form-group.signup-buttons
+      button.btn.btn-info#reset-btn(type="submit", ng-click="reset(email)", ng-disabled="resetForm.$invalid", ng-i18next="") reset.sendLink

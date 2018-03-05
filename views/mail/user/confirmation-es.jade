@@ -1,0 +1,7 @@
+html
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hola #{user.username}, gracias por crear tu cuenta.
+    p Por favor confirma tu email haciendo clic <a href="http://#{domain}/confirm/#{user.confirmation.code}/#{user.email}">en este enlace</a>.

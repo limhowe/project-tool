@@ -1,0 +1,35 @@
+ul.comments(ng-if="comment.children", style="padding-left: 20px", ng-init="parent=comment.children")
+  div(ng-repeat="comment in comment.children | orderByVotes | orderBy:created_at:true")
+    div(ng-if="comment._id")
+      li.comment.panel
+        .panel-heading.by-who
+          span.pull-left
+            b {{ comment.user.name.first + ' ' + comment.user.name.last}}
+          .noselect
+            &nbsp;&nbsp;
+            span.glyphicon.glyphicon-arrow-up(ng-click="upvote(comment)", ng-style="{color: comment.upvote ? '#D24D57': '#58666e'}")
+            &nbsp;
+            span {{ comment.upvotes.length }}
+            &nbsp;
+            span.glyphicon.glyphicon-edit(ng-click="comment.editing = !comment.editing")
+            &nbsp;
+            span.glyphicon.glyphicon-remove(ng-hide="comment.user._id != user._id", ng-click="removeComment(comment, parent)")
+            span.pull-right(am-time-ago="comment.created_at")
+        .panel-body.text
+          .content-editable.comment-text(id="{{'c_'+ comment._id}}"
+            edit-enter="updateComment"
+            edit-data="{{comment}}"
+            ng-bind-html="comment.text"
+            comment-id = "{{comment._id}}"
+            editable
+            edit-multiline="true"
+            style="white-space:pre-wrap; white-space:-moz-pre-wrap; white-space:-pre-wrap; white-space:-o-pre-wrap; word-wrap:break-word; box-sizing:border-box; -moz-box-sizing:border-box; webkit-box-sizing:border-box;")
+          .c_cover.noselect(id="{{'c_cover_'+comment._id}}")
+          br
+          span.label.label-success.reply(ng-click="show_reply(comment)", ng-i18next="") taskForm.reply
+          .add-comment.inside.panel.panel-default(ng-show="comment.show_reply")
+            .enter-text
+              textarea(ng-model="text", rows="3", ng-i18next="[placeholder]taskForm.yourComment")
+            .panel-footer
+              button.comment-btn.btn.btn-success.btn-sm.pull-right(ng-click="addComment(text, currentNode, comment); text='';", ng-i18next="") taskForm.comment
+      ng-include(src="'views/default/project/includes/comment'")

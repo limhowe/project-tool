@@ -1,0 +1,68 @@
+
+script(type="text/javascript").
+  LeadDyno.key = "2ce2e4b77da299837cd2cfbcc02c19196c91d821";
+  LeadDyno.recordVisit();
+  LeadDyno.autoWatch();
+
+.text-center
+  #logo
+  //-h1.signup-title#form-title(ng-i18next="") signUp.getStarted
+  p(ng-i18next="") signUp.signUpQuickly
+  h1.signup-title#form-title {{testimonial.desc}}
+  p {{testimonial.author}}
+
+.signin-signup-form-center
+  form.user-form.signup-form(role="form", name="userForm")
+
+    .form-group
+      div
+        a#connect-google(href="", ng-click="socialAuth('google')", ng-i18next="") signUp.signUpWithGoogle
+      div
+        a#connect-linkedin(href="", ng-click="socialAuth('linkedin')", ng-i18next="") signUp.signUpWithLinkedIn
+      div
+        a#connect-live(href="", ng-click="socialAuth('live')", ng-i18next="") signUp.signUpWithWindowsLive
+
+    .form-group(ng-show="message")
+      .alert(ng-class="message.alertType") {{ message.text }}   <br/>
+
+    .form-group(ng-show="adding")
+      .alert.alert-info
+        img(src="/img/preloader.GIF", width="22", style="margin-right:5px;")
+        span(ng-i18next="") signUp.creating
+
+    .form-group(ng-show="false && user.password_verify && user.password_verify != user.password")
+      .alert.alert-warning(ng-i18next="") signUp.passwordsNotMatch
+
+    .form-group(ng-show="error")
+      .alert.alert-danger
+        {{ error }}
+
+    .form-group
+      label.control-label(for="inputLanguage", ng-i18next="") account.language
+      select.form-control#inputLanguage(ng-model="user.language", ng-options="language.locale as language.name for language in languages", ng-change="changeLanguage()")
+    .form-group
+      label.control-label(for="inputEmail", ng-i18next="") signUp.email
+      input#inputEmail.form-control(
+        type="email",
+        ng-readonly="emailAlreadySet",
+        required,
+        autocomplete="off",
+        typeahead="email for email in invitedEmails | filter:$viewValue | limitTo:5",
+        typeahead-min-length='3',
+        typeahead-editable="true",
+        ng-model="user.email",
+        ng-i18next="[placeholder]signUp.emailAddress")
+
+      p.sub-label(ng-show='!emailAlreadySet', ng-i18next="") signUp.whatIsYourEmail
+    .form-group
+      label.control-label(for="inputUsername", ng-i18next="") signUp.username
+      input.form-control#inputUsername(type="text", required, ng-model="user.username", ng-i18next="[placeholder]signUp.chooseUsername")
+    .form-group
+      label.control-label(for="inputPassword", ng-i18next="") signUp.password
+      input.form-control#inputPassword(type="password", required, ng-model="user.password", ng-i18next="[placeholder]signUp.password")
+    .form-group
+      label.control-label(for="inputPasswordVerify", ng-i18next="") signUp.confirmPassword
+      input.form-control#inputPasswordVerify(type="password", required, ng-model="user.password_verify", ng-i18next="[placeholder]signUp.passwordConfirmation", equals="{{ user.password }}")
+    .form-group.signup-buttons
+      button.btn.btn-info#signup-btn(type="submit", ng-click="signup(user, userForm)", ng-disabled="userForm.$invalid", ng-i18next="") signUp.signUp
+      a.btn.btn-default.pull-right#signin-btn(href="/signin", ng-i18next="") signUp.alreadyHaveAccount

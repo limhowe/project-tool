@@ -1,0 +1,26 @@
+.container
+  .text-center
+    h2(ng-i18next="") referral.invitePeople
+    p(ng-i18next="") referral.referralDescription
+
+  .row
+    form.col-lg-5.col-lg-offset-1.form-horizontal(role="form", name="referralForm")
+      .form-group(ng-show="message !== null")
+        .alert(ng-class="message.alertType") {{ message.text }}
+      .form-group
+        label.control-label(for="inputEmail", ng-i18next="") referral.email
+        input.form-control#inputEmail(type="text", ng-model="referral.email", required, ng-i18next="[placeholder]referral.enterEmail")
+      .form-group
+        label.control-label(for="inputMessage", ng-i18next="") referral.message
+        textarea.form-control#inputMessage(ng-model="referral.message", required, rows="4", style="height:125px;")
+      .form-group.text-right
+        button.btn.btn-info(type="submit", ng-click="invite(referral, referralForm)", ng-disabled="referralForm.$invalid", ng-i18next="") referral.inviteViaEmail
+
+    form.col-lg-5.col-lg-offset-1.form-horizontal(role="form", name="referralLinkedInForm")
+      .form-group
+        label.control-label(for="inputLinkedinMessage", ng-i18next="") referral.message
+        div
+          textarea.form-control#inputLinkedinMessage(ng-model="referral.linkedInMessage", required, rows="4", style="height:200px;")
+      .form-group
+        a.share-links.linkedin.pull-right(href="", ng-click="shareInvitationToLinkedIn(referral, referralLinkedInForm)", ng-disabled="referralLinkedInForm.$invalid", ng-i18next="") referral.shareWithLinkedIn
+        button#sharePost.share-links.google-plus.g-interactivepost(data-contenturl="{{options.contenturl}}", data-contentdeeplinkid="{{options.contentdeeplinkid}}", data-clientid="{{options.clientid}}", data-cookiepolicy="{{options.cookiepolicy}}", data-prefilltext="{{options.prefilltext}}", data-calltoactionlabel="{{options.calltoactionlabel}}", data-calltoactionurl="{{options.calltoactionurl}}", data-calltoactiondeeplinkid="{{options.calltoactiondeeplinkid}}", ng-i18next="") referral.shareWithGooglePlus

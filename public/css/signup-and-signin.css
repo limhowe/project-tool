@@ -1,0 +1,165 @@
+
+body.signin,
+body.signup,
+body.reset,
+body.confirmation {
+background: url('../img/signin-signup-bg.jpg');
+background-repeat: no-repeat;
+background-position: center top;
+background-color: #05ab18;
+background-size: 600px auto;
+}
+
+body.signin p,
+body.signup p,
+body.signin-signup p{
+color: #ffffff;
+}
+
+h1.signin-title,
+h1.signup-title,
+h1.reset-title {
+color: #ffffff;
+font-size: 32px;
+font-family: 'Open Sans', sans-serif;
+text-transform: uppercase;
+
+}
+
+h1.signin-title {
+
+}
+
+div.signin-signup-form-center {
+display: table;
+margin: 40px auto 40px auto;
+
+padding: 40px 50px 20px 50px;
+background-color: rgba(4, 154, 22, 0.7);
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+}
+
+.signin-form.user-form p,
+.signup-form.user-form p {
+color: #ffffff;
+}
+
+.signin-form.user-form .form-group,
+.signup-form.user-form .form-group {
+margin-bottom: 20px;
+}
+
+.signin-form input:-webkit-autofill,
+.signin-form textarea:-webkit-autofill,
+.signin-form select:-webkit-autofill {
+color: #000000 !important;
+background-color: #ffffff !important;
+}
+
+.signin-form label.control-label,
+.signup-form label.control-label {
+color: #ffffff;
+font-size: 16px;
+line-height: 16px;
+font-family: 'Open Sans', sans-serif;
+font-weight: 300;
+
+margin-bottom: 5px;
+}
+
+.signin-form input,
+.signin-form textarea,
+.signin-form select,
+.signup-form input,
+.signup-form textarea,
+.signup-form select,
+.reset-form input,
+.reset-form textarea,
+.reset-form select {
+color: #000000;
+background-color: #ffffff;
+
+min-width: 300px;
+border: 1px solid #058c15;
+
+-webkit-border-radius: 0px;
+-moz-border-radius: 0px;
+border-radius: 0px;
+}
+
+.signin-form #signin-btn,
+.signup-form #signup-btn,
+.reset-form #reset-btn {
+color: #ffffff;
+font-size: 18px;
+font-family: 'Open Sans', sans-serif;
+font-weight: bold;
+padding: 6px 10px;
+border: 2px solid #ff7b06;
+background-color: #ff7b06;
+text-transform: uppercase;
+
+margin-right: 40px;
+}
+
+.signin-form #signup-btn,
+.signup-form #signin-btn {
+color: #ffffff;
+font-size: 18px;
+font-family: 'Open Sans', sans-serif;
+font-weight: bold;
+padding: 6px 10px;
+border: 2px solid #ffffff;
+background-color: #049a16;
+text-transform: uppercase;
+}
+
+.signin-form #reset a {
+float: none;
+color: #ffffff;
+font-size: 14px;
+line-height: 14px;
+font-family: 'Open Sans', sans-serif;
+font-weight: 300;
+
+display: inline-block;
+margin-top: 15px;
+}
+
+.signin-form a#connect-google,
+.signin-form a#connect-linkedin,
+.signin-form a#connect-live,
+.signup-form a#connect-google,
+.signup-form a#connect-linkedin,
+.signup-form a#connect-live {
+color: #ffffff;
+float: none;
+opacity: 1;
+}
+
+.signup-form a#connect-google,
+.signup-form a#connect-linkedin,
+.signup-form a#connect-live {
+font-size: 17px;
+font-family: 'Open Sans', sans-serif;
+font-weight: bold;
+
+height: auto;
+padding: 10px 45px;
+background-position: left 10px center;
+border: 2px solid #ffffff;
+
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+}
+
+@media screen and (min-width:768px) {
+
+.signin-form #signup-btn.pull-right {
+float: none !important;
+}
+
+}

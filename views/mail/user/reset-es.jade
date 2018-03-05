@@ -1,0 +1,10 @@
+html
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    p Recibiste este email porque tú (o alguien más) ha solicitado restablecer la contraseña de tu cuenta.
+    p Por favor haz clic en el siguiente enlace, o pega esto en tu navegador para completar el proceso:
+    p
+      a(href="http://#{domain}/reset/#{user.reset_token}") restablecer
+    p Si no solicistaste esto, por favor ignora este email y tu contraseña permancerá sin cambios.

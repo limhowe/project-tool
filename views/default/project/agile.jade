@@ -1,0 +1,161 @@
+.square(ng-if="vm.showLoader")
+  .spinner
+    .ball
+    p(ng-i18next="") agileView.loading
+div(ng-show="!vm.showLoader")
+  .agile-header.clearfix
+    .pull-left(ng-show="vm.boardList.length")
+      tabset.agile-tab-container
+        tab.agile-tabs(
+          heading="{{board.name}}"
+          ng-click="vm.setBoard(board._id)"
+          ng-repeat="board in vm.boardList"
+          active="board.active"
+          id="{{'board_' + board._id}}"
+        )
+    .pull-right
+      .add-new-board.pull-left(ng-if="!vm.isBoardTitleFormVisible && !vm.isBoardEditFormVisible"
+        heading=""
+        ng-click="vm.showBoardTitleForm()"
+        ng-i18next="") agileView.createNewBoard
+      .pull-left.board-title-form(ng-show="vm.isBoardTitleFormVisible")
+        span.promt(ng-i18next="") agileView.enterToCreateNewBoard
+        input.editable.form-control.edit-in-place.new-board-entry(type="text"
+          ng-i18next="[placeholder]agileView.enterBoardName"
+          ng-enter="vm.boardCreate()"
+          focus-me="vm.isBoardTitleFormVisible"
+          ng-esc="vm.hideBoardTitleForm()"
+          focus-out="vm.hideBoardTitleForm()"
+          ng-model="vm.newBoardName")
+      .pull-left(ng-if="vm.isBoardEditFormVisible")
+        input.editable.form-control.edit-in-place.new-board-entry(type="text"
+          ng-enter="vm.renameBoard(board)"
+          focus-me="vm.isBoardEditFormVisible"
+          ng-esc="vm.hideBoardEditForm()"
+          focus-out="vm.hideBoardEditForm()"
+          ng-model="board.name")
+        | &nbsp; &nbsp;
+      .btn-group.pull-left(dropdown, is-open="status.isopen", ng-if="board._id")
+        span.dropdown-toggle.board-options(type="button", ng-click="stashButton($event)", dropdown-toggle)
+          i.fa.fa-gear
+        ul.dropdown-menu.board-settings(role="menu")
+          li.dr-item(ng-click="vm.showBoardEditForm()", ng-i18next="") agileView.renameBoard
+          li.dr-item(ng-click="vm.removeBoard(board)", ng-i18next="") agileView.deleteBoard
+  .well.well-lg(ng-if="!vm.boardList.length")
+    span.click-text(ng-click="vm.showBoardTitleForm()", ng-i18next="") agileView.createNewBoardInQuotes
+    &nbsp;
+    span(ng-i18next="") agileView.toGetStarted
+  .board
+    .clearfix(data-board="{{board._id}}", ng-style="{ 'width': board.width + 250 }")
+      .sortable-basic.sortable(ng-repeat="list in board.lists | orderBy: 'position'", id="{{list._id}}")
+        .list
+          .row
+            .col-xs-9
+              h4.list-title.handler(
+                id="title_{{list._id}}",
+                editable
+                ng-model="list.name"
+                on="dblClick"
+                edit-enter="renameList"
+                edit-data="{{ {list_id: list._id, board_id: board._id} }}"){{list.name}}
+            .col-xs-3
+              i.fa.fa-plus.pull-right.import-task-icon(ng-click="vm.showPanel(list)")
+          .row
+            .col-xs-10
+              .agile-button.btn.btn-primary(ng-click="vm.createTask(list)", ng-i18next="") agileView.createTask
+              .agile-button.btn.btn-primary(ng-click="vm.showPanel(list)", ng-i18next="") agileView.addTasks
+              #addTaskDropdown(dropdown)
+                i.fa.fa-caret-down.panel#createTaskCaret(ng-if="sortable.active_task && sortable.active_task.list._id == list._id", dropdown-toggle)
+                ul.dropdown-menu#create-settings(ng-if="sortable.active_task && sortable.active_task.list._id == list._id", role="menu")
+                  li.dr-item(ng-click="vm.createTask(list)", ng-i18next="") agileView.addTask
+                  li.dr-item(ng-click="vm.createTask(list, 'child')", ng-i18next="") agileView.addChildTask
+            .btn-group.col-xs-1(dropdown)
+              i.fa.fa-gear(dropdown-toggle, ng-click="stashButton($event)")
+              ul.dropdown-menu(role="menu")
+                li.dr-item(ng-click="vm.showPanel(list)", ng-i18next="") agileView.importTasks
+                li.dr-item(ng-click="vm.removeList(list, board)", ng-i18next="") agileView.deleteList
+                li.dr-item(ng-click="vm.ejectTasks(list, board)", ng-i18next="") agileView.clearList
+        //-===================================================================================
+        //- Import box
+        //-===================================================================================
+        .task-import-board(id="{{'panel_'+list._id}}")
+          .import-header.agile-task-list-addon(dropdown)
+            i.fa.fa-times(ng-click="vm.closePanel(list)")
+            input.editable.form-control.edit-in-place.agile-task-list-search(type='text', ng-model="search")
+            button.span-buttons.import-task-buttons(ng-click="vm.addTasks(list, board)", ng-i18next="") agileView.add
+            button.span-buttons.import-task-buttons(ng-show="!list.markedAll", ng-click="vm.markAll(list)", ng-i18next="") agileView.markAll
+            button.span-buttons.import-task-buttons(ng-show="list.markedAll", ng-click="vm.unmarkAll(list)", ng-i18next="") agileView.unmarkAll
+            button.span-buttons.import-task-buttons(dropdown-toggle, ng-i18next="") agileView.addByAssignee
+            ul.dropdown-menu.users-dropdown(role="menu")
+              li.dr-item.disabled(ng-if="!project._users.length", ng-i18next="") agileView.assignTasksToUsersFirst
+              li.dr-item(ng-repeat="user in project.users"
+                ng-click="vm.addUserTasks(user, list, board)"
+                ) {{ user.user.email || user.invite_email }}
+          //- Import box task
+          .panel.agile-task-list
+            .agile-task.agile-import-task(
+              id="{{task._id}}"
+              class="{{list._id}}"
+              ng-repeat="task in vm.taskList | filter:search | filter:vm.isTaskInList | filter: vm.isNotCompleted"
+              ng-click="vm.prepareToAdd(task._id, list)")
+              h5.agile-task-title {{ task.title }}
+
+        //-===================================================================================
+        //- task box
+        //-===================================================================================
+        .task-count
+          .row
+            .col-xs-12
+               div(ng-i18next="") [i18next]({count: list.tasks.length})agileView.taskCount
+        ul.sortable-container(id="{{'cont_'+list._id}}"
+          group="agile-board"
+          list-id="{{list._id}}"
+          dnd-list="list.tasks"
+          dnd-drop="vm.dndDrop(list, item)")
+          li.agile-task.in-list(ng-repeat="task in list.tasks"
+              class="{{list._id}}"
+              board-id="{{board._id}}"
+              id="{{task.node._id}}"
+              list-id="{{list._id}}"
+              node-id="{{task.node._id}}"
+              dnd-draggable="task"
+              dnd-moved="vm.moved(task, list)"
+              dnd-dragstart="vm.dndRemove(list)"
+              dnd-effect-allowed="move")
+            h4.agile-task-title(ng-bind="task.node.title")
+
+            .agile-task-controll.pull-right(dropdown)
+              i.fa.fa-times.task-delete-icon(dropdown-toggle)
+              ul.dropdown-menu.delete-options(role="menu")
+                li.dr-item(ng-click="vm.ejectTask(list, board, task)", ng-i18next="") agileView.removeFromList
+                li.dr-item(ng-click="vm.deleteTask(list, board, task)", ng-i18next="") agileView.delete
+            .agile-task-button-panel.clearfix
+              .agile-task-controll.pull-left(ng-click="vm.selectNode(task.node, list, board)")
+                i.fa.fa-info-circle
+              .avatar-cont.pull-left.clearfix
+                .avatar-wrapper(ng-repeat="avatar in task.node.avatars")
+                  .avatarImg(ng-if="avatar.imgUrl && avatar.img != 'wtf'")
+                    img(ng-src="{{avatar.imgUrl}}", ng-if="avatar.imgUrl != 'wtf'")
+                    i.fa.fa-user-secret(ng-if="avatar.imgUrl == 'wtf'")
+                    .tool-tip(ng-if="avatar.email") {{avatar.email}}
+                  .avatar(ng-if="avatar.initials"){{ avatar.initials}}
+                    .tool-tip {{avatar.email}}
+                  .avatar(ng-if="avatar.placeholder")
+                    i.fa.fa-user
+                    .tool-tip {{avatar.email}}
+      .pull-left
+        input.form-control.edit-in-place.new-list-entry(type="text"
+          ng-show="vm.isListFormVisible"
+          ng-i18next="[placeholder]agileView.enterListName"
+          focus-me="vm.isListFormVisible"
+          ng-model="vm.newListName"
+          ng-class="{'with-margin': board.lists.length}"
+          ng-enter="vm.createList(board)"
+          ng-esc="vm.hideListForm()"
+          focus-out="vm.hideListForm()")
+        span.promt(ng-show="vm.isListFormVisible", ng-i18next="") agileView.enterToCreateNewList
+        span.add-new-list(ng-show="board && board.lists.length && !vm.isListFormVisible", ng-click="vm.showListForm()", ng-i18next="") agileView.newList
+    .well.well-lg(ng-if="board && !board.lists.length")
+      span(ng-i18next="") agileView.createFirstList
+      &nbsp;
+      span.click-text(ng-click="vm.showListForm()", ng-i18next="") agileView.newListInQuotes

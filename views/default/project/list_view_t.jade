@@ -1,0 +1,28 @@
+.square(ng-class="{'left-aligned':vm.isTaskVisible}", ng-if="vm.showLoader")
+  .spinner()
+    .ball
+    p(ng-i18next="") listView.loading
+#list-view-container(ng-if="!vm.showLoader")
+  .row.lv-header-row
+    .col-sm-9
+      .searchCont.search
+        input.navbar-search#taskSearch(ng-change="filterByTitle(task)", ng-model='search.query')
+        span.glyphicon.glyphicon-remove(style="cursor:pointer; margin-left:-20px;", ng-show="search.query!=''", ng-click="search.query=''; filterByTitle(task);")
+    .col-sm-3
+      .searchByUser.pull-right( dropdown )
+        button.btn.info-button#filter-button(dropdown-toggle, ng-i18next="") listView.filterByAssignee
+        ul.dropdown-menu.filteruser-dropdown(role="menu")
+          li.dropdownItem(ng-click="filterByUser(false);", ng-i18next="") listView.allUsers
+          li.dropdownItem(ng-click="filterByUser('unassigned');", ng-i18next="") listView.unassigned
+          li.dropdownItem(ng-repeat="user in project._users", ng-click="filterByUser(user);"){{ user.user.name.first || user.user.email || user.invite_email + ' (waiting for registration)' }}
+      br.hidden-xs
+      br.hidden-xs
+      p.hide_completed.pull-right
+        span(ng-i18next="") listView.hideCompleteTasks
+        input.lv-checkbox(type="checkbox", ng-model="project.settings.hide_completed", ng-change="vm.changeHideCompleted()")
+  .lv-list-row
+    #tree-root(ui-tree="sTreeOptions", ng-show="!vm.showLoader")
+      ol(ui-tree-nodes, ng-model="sTree._nodes", ng-init="initCollapse(this)")
+        li(id="{{task._id}}", ng-repeat="task in sTree._nodes", ui-tree-node, ng-include="'views/default/project/includes/simple_node'")
+    button.btn.btn-primary(ng-click="createTempTask(this)", ng-show="!vm.showLoader", ng-i18next="") listView.createTask
+div(ng-include="'views/default/project/includes/risk_modal'")

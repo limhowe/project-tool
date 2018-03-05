@@ -1,0 +1,10 @@
+html
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hola de #{inviter.username}
+      if inviter.name && inviter.name.first && inviter.name.last
+        | (#{inviter.name.first} #{inviter.name.last})
+    p #{message}
+    p Crea una cuenta gratis sólo <a href="http://#{domain}/signup/referral/#{inviter._id}/#{email}">haciendo clic en este enlace</a>.

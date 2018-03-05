@@ -1,0 +1,16 @@
+script(type="text/ng-template", id="importModal.html")
+  .modal-header
+    button.close(type="button", ng-click="close()") &times;
+    h4.modal-title Import Project
+  .modal-body.import
+    div
+      h4.lead.text-center Upload Existing Project File
+    .alert(ng-class="message.alertType", ng-show="message") {{ message.text }}
+    .row
+      .col-md-12 We are busy creating automatic importing, until it is ready feel free to upload a project in any format here for us to process. You will receive an email when it is ready.
+    .row(style="margin-top: 20px;")
+      form.form-inline.col-md-12(name="projectUploadForm")
+        input(type="file", file-model="inputFile.projectFile")
+  .modal-footer
+    img(src="/img/preloader.GIF", width="30", ng-show="fileSending")
+    button.btn.btn-primary(type="button", ng-disabled="(!inputFile.projectFile) || fileSending", ng-click="send()") Send

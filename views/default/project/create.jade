@@ -1,0 +1,20 @@
+.container
+  p.text-center(ng-i18next="") projectCreate.createNewProject
+
+  .form-group(ng-show="message")
+    .alert(ng-class="message.alertType") {{ message.text }}
+
+  form(role="form", name="projectForm")
+    .form-group
+      label.control-label(for="inputName", ng-i18next="") projectCreate.name
+      input.form-control#inputName(type="text", ng-model="vm.project.name", required, ng-i18next="[placeholder]projectCreate.enterProjectName")
+    .form-group
+      label.control-label(for="inputDescription", ng-i18next="") projectCreate.description
+      textarea.form-control#inputDescription(ng-model="vm.project.description", rows="4")
+    .form-group
+      .checkbox
+        label
+          input(type="checkbox", ng-model="vm.project.use_quality")
+          span(ng-i18next="") projectCreate.useQualityChecklist
+    .form-group.text-right
+      button.btn.btn-info(type="submit", ng-click="vm.onSubmit(projectForm)", ng-disabled="projectForm.$invalid || isFreePlan", ng-i18next="") projectCreate.create

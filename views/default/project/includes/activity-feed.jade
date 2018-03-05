@@ -1,0 +1,26 @@
+div(ng-controller="ActivityFeedController")
+  div#activity-feed(ng-show="isFeedVisible")
+    div(ng-show="showLoader")
+      .spinner
+        .ball
+        p(ng-i18next="") activityFeed.loading
+
+    #closeForm(ng-click="hideActivityFeed()") x
+    div.row
+      div.col-lg-12
+        h2.col-lg-12(ng-i18next="") activityFeed.activityFeed
+        .col-lg-4.text-left
+          a(style="font-size:25px;", ng-click="loadPreviousPage()") 
+            span.fa.fa-chevron-circle-left
+        .col-lg-4.text-center
+          div(style="font-size:25px;") {{ currentPage }}/{{ pageCount }}
+        .col-lg-4.text-right
+          a(style="font-size:25px;", ng-click="loadNextPage()")
+            span.fa.fa-chevron-circle-right
+      div.col-lg-12.activity(ng-repeat="activity in activities")
+        //-span.col-lg-3 {{ activity.created_at | date:dateFormat }}
+        span.col-lg-3(am-time-ago="activity.created_at")
+        span.col-lg-9
+          a(ng-show="activity.node", ng-click="selectNode(activity.node)")
+            span(ng-i18next="") [i18next]({user: (activity.user.username || activity.user.email), task:activity.nodeTitle, item:activity.quality, list:activity.listName, board:activity.boardName, comment:activity.commentText, risk:activity.riskName, resource:activity.resource}) {{ activity.action }}
+          span(ng-show="!activity.node", ng-i18next="") [i18next]({user: (activity.user.username || activity.user.email), task:activity.nodeTitle, item:activity.quality, list:activity.listName, board:activity.boardName, comment:activity.commentText, risk:activity.riskName, resource:activity.resource}) {{ activity.action }}

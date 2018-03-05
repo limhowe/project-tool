@@ -1,0 +1,12 @@
+#task_form_include(ng-show="isTaskFormVisible", clickOff)
+  tabset(justified="true")
+    tab.nf-tabs
+      tab-heading(ng-i18next="") taskForm.info
+      ng-include(src="'views/default/project/task_form/task_info'")
+    tab.nf-tabs
+      tab-heading(ng-i18next="") taskForm.timeCost
+      ng-include(src="'views/default/project/task_form/task_attributes'")
+    tab.nf-tabs
+      tab-heading(ng-i18next="") taskForm.raci
+      ng-include(src="'views/default/project/task_form/raci'")
+    #closeForm(ng-click="hideTaskForm()") x

@@ -1,0 +1,34 @@
+.navbar.navbar-default.navbar-fixed-top
+  .nav-bottom
+  .container(ng-controller="ProjectListController")
+    .navbar-header
+      button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      div.navbar-brand#navbar-brand
+        a(href="/") {{ project.title || 'PlanHammer' }}
+        i#feed-icon.fa.fa-bell(ng-show="newFeedActivity && $state.includes('default.project')", ng-click="toggleActivityFeed()")
+        i#feed-icon.fa.fa-bell-o(ng-show="!newFeedActivity && $state.includes('default.project')", ng-click="toggleActivityFeed()")
+    .navbar-collapse.collapse
+      ul.nav.navbar-nav.navbar-right
+        li.subscription_left(ng-show="subscriptionLeft")
+          a(href="/account/payments", ng-i18next="") [i18next]({subscription: subscriptionLeft})nav.freePeriodExpires
+        li(ng-show="hasDemo")
+          a(href="", ng-click="showTour()", ng-i18next="") nav.tour
+        //- li
+          a(href="/referral", ng-i18next="") nav.freeMonth
+        li
+          a(href="/projects", ng-i18next="") nav.projects
+        li
+          a(href="/feedback", ng-i18next="") nav.feedback
+        li
+          a(href="/account/profile", ng-i18next="") nav.account
+        li
+          a(href="/", ng-click="signout()", ng-i18next="") nav.logout
+
+.container-fluid.container-1#main-container(ng-controller="AppController")
+  ui-view
+
+.tour-container(ph-tour)
+ng-include(src="'views/default/project/includes/activity-feed'")

@@ -1,0 +1,8 @@
+xhtml
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hello
+    p You have been invited to join a PlanHammer project: <b>#{project.name}</b>
+    p Click here to <a href="http://#{domain}/#{ is_registered ? 'signin' : 'signup/invite/' + user._id + '/' + email }">start working</a>.

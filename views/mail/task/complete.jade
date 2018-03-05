@@ -1,0 +1,8 @@
+xhtml
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hello
+    p
+      | Your created task <a href="http://#{domain}/project/#{node._project}/show?task=#{node._id}">#{node.title}</a> is completed. please click <a href="http://#{domain}/signin">here</a> to log in and view.

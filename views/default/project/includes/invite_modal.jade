@@ -1,0 +1,36 @@
+script(type="text/ng-template", id="inviteModal.html")
+  .modal-header
+    button.close(type="button", ng-click="cancel()") &times;
+    h4.modal-title(ng-i18next="") invite.inviteCollaborator
+  .modal-body.invite
+    .alert.alert-warning(ng-show="shared_users.length + invited_users.length >= maxUsers", ng-i18next="") [i18next]({plan: nextPlan})invite.upgradePlanNotice
+
+    .alert(ng-class="message.alertType", ng-show="message", ng-bind="message.text | i18next")
+
+    .alert.alert-danger(ng-show="errors")
+      ul(ng-repeat="error in errors")
+        li {{ error.type }}
+
+    form(role="form", name="projectUserForm")
+      .form-group
+        input.form-control.input-lg#inputEmail(type="text", required, ng-model="invited_user.email", autocomplete="off", ng-i18next="[placeholder]invite.enterEmail")
+      .form-group
+        button.btn.btn-default.btn-lg(type="submit", ng-click="submit(invited_user, projectUserForm)", ng-disabled="projectUserForm.$invalid", ng-i18next="") invite.invite
+
+    div(ng-show="shared_users.length")
+      h4.lead.text-center(ng-i18next="") invite.existingCollaborators
+      ul
+        li(ng-repeat="user in shared_users")
+          strong {{ user.email }}&nbsp;
+          | - {{ user.name.first }} {{ user.name.last }} ({{ user.username }}) &nbsp;
+          span.taskicon.taskicon-remove(ng-click="reject(user, $index)", ng-show="!user.$rejecting") &nbsp;
+          span.glyphicon.glyphicon-refresh(ng-show="shared.user.$rejecting")
+
+    div(ng-show="invited_users.length")
+      hr
+      p.lead.text-center(ng-i18next="") invite.waitingForRegistration
+      ul
+        li(ng-repeat="user in invited_users")
+          b {{ user.invite_email || user.email }} &nbsp;
+          span.taskicon.taskicon-remove(ng-click="reject(user, $index, true)", ng-show="!user.$rejecting") &nbsp;
+          span.glyphicon.glyphicon-refresh(ng-show="user.$rejecting")

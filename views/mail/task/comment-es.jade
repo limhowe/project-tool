@@ -1,0 +1,12 @@
+xhtml
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hola
+    p
+      | #{username} escribió un comentario en la tarea <a href="http://#{domain}/project/#{node._project}/show?task=#{node._id}">#{task}</a> que tienes asignada:
+    p
+      | #{text}
+    p
+      | Clic <a href="http://#{domain}/signin">aquí</a> para iniciar sesión.

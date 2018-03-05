@@ -1,0 +1,30 @@
+.col
+  div
+    .alert.alert-success.email-conf(ng-show="is_confirmed", ng-i18next="") confirmation.confirmed
+    .alert.alert-danger(ng-show="!is_confirmed", ng-i18next="") confirmation.invalid
+  div
+    .text-center
+      #logo
+      h1.signin-title(id="form-title", ng-i18next="") signIn.signInToPlanHammer
+    .signin-signup-form-center
+      form.user-form.signin-form(role="form", name="userForm", ng-submit="login(user, userForm)", form-autofill-fix)
+        .form-group(ng-show="error")
+          .alert.alert-danger {{ error }} <br/>
+        .form-group
+          label.control-label(for="inputEmail1", ng-i18next="") signIn.usernameOrEmail
+          div
+            input.form-control#inputEmail1(type="text", required, ng-model="user.username", ng-i18next="[placeholder]signIn.enterUsernameOrEmail")
+        .form-group
+          label.control-label(for="inputPassword1", ng-i18next="") signIn.password
+          div
+            input.form-control#inputPassword1(type="password", required, ng-model="user.password", ng-i18next="[placeholder]signIn.password")
+        .form-group
+          div
+            button.btn.btn-info#signin-btn(type="submit", ng-disabled="!is_confirmed", ng-i18next="") signIn.signIn
+        .form-group.signup-buttons
+          div
+            a#connect-google(href="", ng-click="authGoogle()", ng-i18next="") signIn.signInWithGoogle
+          div
+            a#connect-linkedin(href="", ng-click="authLinkedin()", ng-i18next="") signIn.signInWithLinkedIn
+          div
+            a#connect-live(href="", ng-click="authLive()", ng-i18next="") signIn.signInWithWindowsLive

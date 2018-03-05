@@ -1,0 +1,81 @@
+.container
+  .row
+    .col-md-6.col-md-offset-3.text-center
+      h3(ng-i18next="") projectSettings.projectSettings
+
+      .form-group(ng-show="message")
+        .alert(ng-class="message.alertType") <img src="/img/preloader.GIF" width="22" style="margin-right:5px;" ng-show="vm.isLoading" />{{ message.text }} <br/>
+
+      .project-manage(ng-show="vm.project")
+        table.table.table-bordered
+          tr
+            td(ng-i18next="") projectSettings.projectName
+            td
+              input.form-control(type="text", ng-model="vm.project.name", ng-model-options="{ updateOn:'blur' }", ng-change="vm.updateProjectName()")
+          tr
+            td(ng-i18next="") projectSettings.projectDesc
+            td
+              textarea.form-control(ng-model="vm.project.description", ng-model-options="{ updateOn:'blur' }", ng-change="vm.updateProjectDescription()")              
+          tr
+            td(ng-i18next="") projectSettings.timezone
+            td
+              select.form-control(
+                name="timezone",
+                ng-model="vm.project.timezone",
+                ng-change="vm.updateProjectTimezone()",
+                ng-options="tz.value as tz.str for tz in vm.timezones"
+              )
+          tr
+            td(ng-i18next="") projectSettings.dateformat
+            td
+              select.form-control(
+                name="dateformat",
+                ng-model="vm.project.dateformat",
+                ng-change="vm.updateProjectDateformat()",
+                ng-options="df.value as df.str for df in vm.dateformats"
+              )
+          tr
+            td(ng-i18next="") projectSettings.export
+            td
+              button.btn.btn-info.btn-block(type="button", ng-click="vm.exportProject()", ng-i18next="") projectSettings.exportTasksAsCSV
+              button.btn.btn-info.btn-block(type="button", ng-click="vm.exportAsMSProject()", ng-i18next="") projectSettings.exportTasksAsMSProject
+          tr
+            td(ng-i18next="") projectSettings.import
+            td
+              button.btn.btn-info.btn-block(type="button", ng-click="vm.importMSProject()", ng-i18next="") projectSettings.importMSProject
+              input.hidden#file-ms-project(type="file")
+          tr
+            td(ng-i18next="") projectSettings.collaborators
+            td
+              ul.collaborators-list
+                li.collaborator-item(ng-repeat="col in vm.project._users") {{ col.invite_email || (col.user.name.first + ' ' + col.user.name.last).trim() || col.user.email  }}
+                  span.pull-right.delete(ng-click="vm.removeCollaborator($index)", ng-i18next="") projectSettings.remove
+                hr(ng-if="vm.project._users.length > 0", style="margin: 10px 0;")
+                span.green(ng-click="vm.inviteCollaborator()", ng-i18next="") projectSettings.invitePeople
+          tr
+            td(ng-i18next="") projectSettings.ganttStartDate
+            td
+              input(
+                id="currentDate",
+                type="radio", 
+                ng-model="vm.project.settings.gantt_start_date", 
+                ng-change="vm.updateProjectGanttStartDate()", 
+                value="CURRENT_DATE"
+              ) 
+              label(for="currentDate", style="margin:0 8px 0 3px; cursor:pointer; line-height:1.5em;", ng-i18next="") projectSettings.currentDate
+              input(
+                id="projectCreationDate",
+                type="radio", 
+                ng-model="vm.project.settings.gantt_start_date", 
+                ng-change="vm.updateProjectGanttStartDate()", 
+                value="PROJECT_CREATION_DATE"
+              )
+              label(for="projectCreationDate", style="margin:0 8px 0 3px; cursor:pointer; line-height:1.5em;", ng-i18next="") projectSettings.projectCreationDate
+              input(
+                id="firstTaskStartDate",
+                type="radio", 
+                ng-model="vm.project.settings.gantt_start_date", 
+                ng-change="vm.updateProjectGanttStartDate()", 
+                value="FIRST_TASK_START_DATE"
+              )
+              label(for="firstTaskStartDate", style="margin:0 8px 0 3px; cursor:pointer; line-height:1.5em;", ng-i18next="") projectSettings.firstTaskStartDate

@@ -1,0 +1,78 @@
+.angular-ui-tree-empty {
+/*border:1px dashed #bbb;
+min-height:100px;
+background-color:#e5e5e5;
+background-image:linear-gradient(45deg,#fff25%,transparent25%,transparent75%,#fff75%,#fff),linear-gradient(45deg,#fff25%,transparent25%,transparent75%,#fff75%,#fff);
+background-size:60px 60px;
+background-position:0 0 30px;*/
+content: "Create some tasks first"
+}
+
+.angular-ui-tree-nodes {
+display:block;
+position:relative;
+list-style:none;
+margin:0;
+padding:0;
+}
+
+.angular-ui-tree-nodes > li:not(:last-child) {
+border-bottom: 1px solid #eee;
+}
+
+.angular-ui-tree-nodes > li > ol {
+border-top: 1px solid #eee;
+margin-bottom: -1px;
+}
+
+.angular-ui-tree-nodes .angular-ui-tree-nodes {
+padding-left:20px;
+}
+
+.angular-ui-tree-node,.angular-ui-tree-placeholder {
+display:block;
+position:relative;
+min-height:20px;
+line-height:20px;
+margin:0;
+padding:0;
+}
+
+@media screen and (min-width: 1500px) {
+    .app-panel:not(.partial)  .angular-ui-tree > .angular-ui-tree-nodes > .angular-ui-tree-node {
+        max-width: calc(100% - 768px);
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1499px) {
+    .app-panel:not(.partial)  .angular-ui-tree > .angular-ui-tree-nodes > .angular-ui-tree-node {
+        width: 567px;
+    }
+}
+
+.angular-ui-tree-hidden {
+display:none;
+}
+
+.angular-ui-tree-placeholder {
+min-height:30px;
+margin:5px 0;
+padding:0;
+}
+
+/*.angular-ui-tree-handle {
+cursor:move;
+text-decoration:none;
+font-weight:700;
+-webkit-box-sizing:border-box;
+-moz-box-sizing:border-box;
+box-sizing:border-box;
+line-height:18px;
+}*/
+
+.angular-ui-tree-drag {
+position:absolute;
+pointer-events:none;
+z-index:999;
+opacity:.8;
+}

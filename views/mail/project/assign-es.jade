@@ -1,0 +1,7 @@
+xhtml
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hola
+    p #{user.name.first} #{user.name.last} te asignó una nueva tarea en el proyecto #{project.name}, por favor haz clic <a href="http://#{domain}/#{is_registered ? 'signin':'signup'}">aquí</a> para iniciar sesión y ver tu asignación.

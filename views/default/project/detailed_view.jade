@@ -1,0 +1,9 @@
+div(ng-include="'views/default/project/includes/risk_modal'")
+div(ng-include="'views/default/project/includes/scheme_assign_modal'")
+div(ng-controller="schemeController")
+  .square(ng-if="showLoader")
+    .spinner
+      .ball
+      p LOADING
+  .ohoo
+    #body.draw-area-container

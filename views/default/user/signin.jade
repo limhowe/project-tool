@@ -1,0 +1,30 @@
+.text-center
+  #logo
+  h1.signin-title#form-title(ng-i18next="") signIn.signInToPlanHammer
+
+.signin-signup-form-center
+  form.user-form.signin-form(role="form", name="userForm", ng-submit="vm.login(userForm)", form-autofill-fix)
+    .form-group(ng-show="message")
+      .alert(ng-class="message.alertType") {{ message.text }}
+    .form-group
+      label.control-label(for="inputEmail1", ng-i18next="") signIn.usernameOrEmail
+      div
+        input.form-control#inputEmail1(type="text", required, ng-model="vm.user.username", ng-i18next="[placeholder]signIn.enterUsernameOrEmail")
+    .form-group
+      label.control-label(for="inputPassword1", ng-i18next="") signIn.password
+      div
+        input.form-control#inputPassword1(type="password", required, ng-model="vm.user.password", ng-i18next="[placeholder]signIn.password")
+    .form-group
+      div
+        button.btn.btn-info#signin-btn(type="submit", ng-i18next="") signIn.signIn
+        a.btn.btn-default.pull-right#signup-btn(href="/signup", ng-i18next="") signIn.createAccount
+      #reset
+        a(href="/reset", ng-i18next="") signIn.resetPassword
+
+    .form-group.signup-buttons
+      div
+        a#connect-google(href="", ng-click="vm.authGoogle()", ng-i18next="") signIn.signInWithGoogle
+      div
+        a#connect-linkedin(href="", ng-click="vm.authLinkedin()", ng-i18next="") signIn.signInWithLinkedIn
+      div
+        a#connect-live(href="", ng-click="vm.authLive()", ng-i18next="") signIn.signInWithWindowsLive

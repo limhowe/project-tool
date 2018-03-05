@@ -1,0 +1,12 @@
+.popover(ng-show="vm.currentStep !== null", ng-style="vm.popoverPosition")
+  h3.popover-title(ng-bind="vm.steps[vm.currentStep].title | i18next")
+  .popover-content(ng-bind="vm.steps[vm.currentStep].content | i18next")
+  .popover-navigation.clearfix
+    .btn-group.pull-left
+      button.btn.btn-sm.btn-default(ng-click="vm.gotoPrev()", ng-disabled="vm.currentStep === 0")
+        | &laquo;&nbsp;
+        span(ng-i18next="") tour.prev
+      button.btn.btn-sm.btn-default(ng-click="vm.gotoNext()", ng-disabled="vm.currentStep === vm.steps.length - 1")
+        span(ng-i18next="") tour.next
+        | &nbsp;&raquo;
+    button.btn.btn-sm.btn-default.pull-right(ng-click="vm.endTour()", ng-i18next="") tour.endTour

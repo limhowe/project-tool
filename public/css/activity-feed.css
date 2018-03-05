@@ -1,0 +1,35 @@
+#feed-icon {
+  color: #ffffff;
+  font-size: 17px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+#activity-feed {
+  position: fixed;
+  top: 60px;
+  background-color: #fff;
+  color: #5A5C5A;
+  height: 100%;
+  min-height: 100%;
+  left: 100px;
+  margin-top: -20px;
+  margin-right: -25px;
+  border: 1px solid #ddd;
+  overflow-y: auto;
+  z-index: 999;
+  width: 40%;
+}
+
+#activity-feed #closeForm {
+  padding: 5px;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #DDD;
+}
+
+
+#activity-feed .activity {
+  padding: 5px 15px;
+  border-bottom: 1px solid #DDD;
+}

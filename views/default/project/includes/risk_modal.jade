@@ -1,0 +1,155 @@
+script(type="text/ng-template", id="showRiskModal.html")
+  .modal-header
+    button.close(type="button", ng-click="close()") &times;
+    h4.modal-title(ng-i18next="") [i18next]({risk: currentRisk.name})riskModal.updateRisk
+  .modal-body.new-risk-modal
+    form(role="form", name="riskForm")
+      .form-group(ng-show="message")
+        .alert(ng-class="message.alertType") {{ message.text }}
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskName", ng-i18next="") riskModal.name
+        .col-xs-12.col-lg-12
+          input.form-control#riskName(type="text", required, ng-model="currentRisk.name")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskTopic", ng-i18next="") riskModal.topic
+        .col-xs-12.col-lg-12
+          input.form-control#riskTopic(type="text", required, ng-model="currentRisk.topic")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskProbability")
+          span(ng-i18next="") riskModal.probability
+          &nbsp;
+          label.control-label {{ currentRisk.probability || 0}}
+        .col-xs-12.col-lg-12
+          .progress.progress-striped(my-progress="currentRisk.probability || 0")
+          .range-slider(range-slider, min="0", max="100", startlow="0", starthigh="100", step="5", ng-model="currentRisk.probability")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskImpact")
+          span(ng-i18next="") riskModal.impact
+          &nbsp;
+          label.control-label {{ currentRisk.impact || 0}}
+        .col-xs-12.col-lg-12
+          .progress.progress-striped(my-progress="currentRisk.impact || 0")
+          .range-slider(range-slider, min="0", max="100", startlow="0", starthigh="100", step="1", ng-model="currentRisk.impact")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskScore")
+          span(ng-i18next="") riskModal.riskScore
+          &nbsp;
+          label.control-label#riskScore {{ (currentRisk.probability * currentRisk.impact) || 0 }}
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksMitigation", ng-i18next="") riskModal.mitigation
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksMitigation(ng-model="currentRisk.mitigation", rows="3")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksContingency", ng-i18next="") riskModal.contingency
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksContingency(ng-model="currentRisk.contingency", rows="3")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksConsequence", ng-i18next="") riskModal.consequence
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksConsequence(ng-model="currentRisk.consequence", rows="3")
+      .text-right
+        button.btn.btn-success(ng-click="editRisk()", ng-i18next="") riskModal.update
+
+script(type="text/ng-template", id="newRiskModal.html")
+  .modal-header
+    button.close(type="button", ng-click="close()") &times;
+    h4.modal-title(ng-i18next="") riskModal.newRisk
+  .modal-body.new-risk-modal
+    form(role="form", name="riskForm")
+      .form-group(ng-show="message")
+        .alert(ng-class="message.alertType") {{ message.text }}
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskName", ng-i18next="") riskModal.name
+        .col-xs-12.col-lg-12
+          input.form-control#riskName(type="text", required, ng-model="$risk.name")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskTopic", ng-i18next="") riskModal.topic
+        .col-xs-12.col-lg-12
+          input.form-control#riskTopic(type="text", required, ng-model="$risk.topic")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskProbability")
+          span(ng-i18next="") riskModal.probability
+          &nbsp;
+          label.control-label {{ $risk.probability || 0}}
+        .col-xs-12.col-lg-12
+          .progress.progress-striped(my-progress="$risk.probability || 0")
+          .range-slider(range-slider, min="0", max="100", startlow="0", starthigh="100", step="5", ng-model="$risk.probability")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskImpact")
+          span(ng-i18next="") riskModal.impact
+          &nbsp;
+          label.control-label {{ $risk.impact || 0}}
+        .col-xs-12.col-lg-12
+          .progress.progress-striped(my-progress="$risk.impact || 0")
+          .range-slider(range-slider, min="0", max="100", startlow="0", starthigh="100", step="1", ng-model="$risk.impact")
+      .form-group.row
+        label.col-xs-12.control-label(for="riskScore")
+          span(ng-i18next="") riskModal.riskScore
+          &nbsp;
+          label.control-label(id="riskScore") {{ ($risk.probability * $risk.impact) || 0 }}
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksMitigation", ng-i18next="") riskModal.mitigation
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksMitigation(ng-model="$risk.mitigation", rows="3")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksContingency", ng-i18next="") riskModal.contingency
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksContingency(ng-model="$risk.contingency", rows="3")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksConsequence", ng-i18next="") riskModal.consequence
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksConsequence(ng-model="$risk.consequence", rows="3")
+      .text-right
+        button.btn.btn-success(ng-click="addRisk($risk, riskForm)", ng-i18next="") riskModal.save
+
+script(type="text/ng-template", id="formRiskModal.html")
+  .modal-header
+    button.close(type="button", ng-click="close()") &times;
+    h4.modal-title(ng-i18next="") riskModal.newRisks
+  .modal-body.new-risk-modal
+    form(role="form", name="riskForm")
+      .form-group(ng-show="message")
+        .alert.col-lg-12(ng-class="message.alertType") {{ message.text }} <br/>
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskName", ng-i18next="") riskModal.name
+        .col-xs-12.col-lg-12
+          input.form-control#riskName(type="text", required, ng-model="$risk.name")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskTopic", ng-i18next="") riskModal.topic
+        .col-xs-12.col-lg-12
+          input.form-control#riskTopic(type="text", required, ng-model="$risk.topic")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskProbability")
+          span(ng-i18next="") riskModal.probability
+          &nbsp;
+          label.control-label {{ $risk.probability || 0}}
+        .col-xs-12.col-lg-12
+          .progress.progress-striped(my-progress="$risk.probability || 0")
+          .range-slider(range-slider, min="0", max="100", startlow="0", starthigh="100", step="5", ng-model="$risk.probability")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskImpact")
+          span(ng-i18next="") riskModal.impact
+          &nbsp;
+          label.control-label {{ $risk.impact || 0}}
+        .col-xs-12.col-lg-12
+          .progress.progress-striped(my-progress="$risk.impact || 0")
+          .range-slider(range-slider, min="0", max="100", startlow="0", starthigh="100", step="1", ng-model="$risk.impact")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riskScore")
+          span(ng-i18next="") riskModal.riskScore
+          &nbsp;
+          label.control-label#riskScore {{ ($risk.probability * $risk.impact) || 0 }}
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksMitigation", ng-i18next="") riskModal.mitigation
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksMitigation(ng-model="$risk.mitigation", rows="3")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksContingency", ng-i18next="") riskModal.contingency
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksContingency(ng-model="$risk.contingency", rows="3")
+      .form-group.row
+        label.col-xs-12.col-lg-12.control-label(for="riksConsequence", ng-i18next="") riskModal.consequence
+        .col-xs-12.col-lg-12
+          textarea.form-control#riksConsequence(ng-model="$risk.consequence", rows="3")
+      .text-right
+        button.btn.btn-success(ng-click="addRisk(currentNode, riskForm)", ng-i18next="") riskModal.save

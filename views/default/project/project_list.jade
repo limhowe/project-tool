@@ -1,0 +1,57 @@
+.square(ng-if="!ownProjectsLoaded || !sharedProjectsLoaded")
+  .spinner
+    .ball
+    p(ng-i18next="") projectList.loading
+
+.col-sm-12(ng-if="ownProjectsLoaded && sharedProjectsLoaded")
+  div(ng-include="'views/default/project/includes/invite_modal'")
+  h2(ng-i18next="") projectList.projects
+
+  a.btn.btn-primary.project-create-link(ui-sref="default.project_create", ng-i18next="") projectList.createNewProject
+
+  .well.well-lg(ng-if="vm.projectsCreated.length == 0")
+    span(ng-i18next="") projectList.createFirstProject
+    &nbsp;
+    a(ui-sref="default.project_create", ng-i18next="") projectList.createNewProject
+
+  .table-responsive
+    table.project-list.table.table-striped
+      thead
+        tr
+          th(ng-i18next="") projectList.myProjects
+          th(ng-i18next="") projectList.options
+      tbody
+        tr(ng-repeat="project in vm.projectsCreated", ng-show="!project.$process")
+          td
+            a(ui-sref="default.project.list({id: project.id})") {{ project.name }}
+          td
+            a(ui-sref="default.project.list({id: project.id})")
+              span.fa.fa-folder-open(ng-i18next="") projectList.open
+            | &nbsp; | &nbsp;
+            a(href="", ng-click="invite(project)")
+              span.fa.fa-user-plus(ng-i18next="") projectList.invite
+            span._hidden-xs
+              | &nbsp; | &nbsp;
+              a(ui-sref="default.project.manage({id: project.id})")
+                span.fa.fa-cog(ng-i18next="") projectList.settings
+              | &nbsp; | &nbsp;
+              a(href="", ng-click="removeProject($index)")
+                span.fa.fa-trash-o(ng-i18next="") projectList.delete
+            span
+              | &nbsp; | &nbsp;
+              a(href="", ng-click="cloneProject(project)")
+                span.fa.fa-files-o(ng-i18next="") projectList.clone
+
+  .table-responsive
+    table.project-list.table.table-striped
+      thead
+        tr
+          th(ng-i18next="") projectList.projectsShared
+          th(ng-i18next="") projectList.options
+      tbody
+        tr(ng-repeat="project in vm.projectsShared")
+          td
+            a(ui-sref="default.project.list({id: project.id})") {{ project.name }}
+          td
+            a(ui-sref="default.project.list({id: project.id})")
+              span.fa.fa-folder-open(ng-i18next="") projectList.open

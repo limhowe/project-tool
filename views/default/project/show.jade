@@ -1,0 +1,28 @@
+div(ng-include="'views/default/project/includes/invite_modal'")
+div(ng-include="'views/default/project/includes/delete_modal'")
+ng-include(src="'views/default/project/task_form/form'")
+
+.ui-container
+  .app-panel(ng-class="{partial: isTaskFormVisible}")
+    .alert.alert-info.alert-dismissible(ng-class="viewType", ng-show="!vm.hasSeenVideo() && viewType!='SETTINGS'")
+      button.close(type="button", aria-label="Close", ng-click="vm.hideVideoTutorialMessage($event)")
+        span(aria-hidden="true") &times;
+      span(ng-i18next="") global.viewTutorialVideo
+      | &nbsp;
+      a.alert-link(href="", ng-click="vm.openEmbedVideo()", ng-i18next="") global.here
+      | .
+    ui-view
+  span.ui-menu-open#openUiMenu(ng-click="vm.openMenuBar()")
+    i.icon-menu(ng-click="vm.openMenuBar()")
+  .ui-menu-panel(click-off="vm.closeMenuBar()", click-button="#openUiMenu")
+    .view-icon-row.view-icon-container(ng-repeat="view in vm.viewList"
+      ng-click="vm.changeView(view.name)"
+      ui-sref-active="active"
+      ng-class="{'active': view.name == viewType}")
+      a.ui-menu-buttom(ui-sref="{{ view.state }}")
+        i(class="{{view.icon}}")
+        span.view-label(ng-i18next="") {{view.tooltip}}
+    .view-icon-row.view-icon-container
+      .ui-menu-buttom(ng-click="vm.openEmbedVideo()")
+          i.fa.fa-question-circle
+          span.view-label(ng-i18next="") global.help

@@ -1,0 +1,9 @@
+.task-flip-controls.clearfix
+  .col-sm-6.info-task-title.text-left
+    a(href="javascript:void(0)", ng-click="goToTask(prevTask)", ng-if="prevTask") 
+      i.fa.fa-chevron-circle-left
+      span(ng-i18next="") taskForm.prevTask
+  .col-sm-6.info-task-title.text-right
+    a(href="javascript:void(0)", ng-click="goToTask(nextTask)", ng-if="nextTask") 
+      span(ng-i18next="") taskForm.nextTask
+      i.fa.fa-chevron-circle-right

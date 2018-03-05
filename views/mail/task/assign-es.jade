@@ -1,0 +1,13 @@
+xhtml
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hola
+    p
+      if user.name && user.name.first
+        #{user.name.first} #{user.name.last}
+      else
+        #{user.email}
+
+      |  te asignó una nueva tarea <a href="http://#{domain}/project/#{node._project}/show?task=#{node._id}">#{node.title}</a>, por favor haz clic <a href="http://#{domain}/#{is_registered ? 'signin':'signup/' + user._id + '/' + email}">aquí</a> para iniciar sesión y ver tu asignación.
